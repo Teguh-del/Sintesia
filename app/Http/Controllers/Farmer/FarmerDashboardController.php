@@ -14,6 +14,27 @@ class FarmerDashboardController extends Controller
         $user = Auth::user()->load('farmerProfile');
         $commodities = Commodity::where('is_active', true)->get();
 
-        return view('farmer.dashboard', compact('user', 'commodities'));
+        $totalHarvestsCount = $user->harvests()->count();
+        $totalHarvestQty = $user->harvests()->sum('quantity');
+        $realAvailableStock = $user->stocks()->sum('available_quantity');
+        $recentHarvests = $user->harvests()->with('commodity')->latest('harvest_date')->take(3)->get();
+
+        $totalProducts = $user->products()->count();
+        $activeProducts = $user->products()->where('status', 'active')->count();
+        $totalStock = $user->products()->sum('stock');
+        $recentProducts = $user->products()->with(['commodity', 'images'])->latest()->take(4)->get();
+
+        return view('farmer.dashboard', compact(
+            'user',
+            'commodities',
+            'totalHarvestsCount',
+            'totalHarvestQty',
+            'realAvailableStock',
+            'recentHarvests',
+            'totalProducts',
+            'activeProducts',
+            'totalStock',
+            'recentProducts'
+        ));
     }
 }

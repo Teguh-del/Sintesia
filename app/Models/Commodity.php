@@ -25,4 +25,19 @@ class Commodity extends Model
             'is_active' => 'boolean',
         ];
     }
+
+    public function products(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function harvests(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Harvest::class);
+    }
+
+    public function stocks(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Stock::class);
+    }
 }

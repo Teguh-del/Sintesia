@@ -23,6 +23,23 @@
         </div>
     </div>
 
+    <!-- Marketplace Discovery Banner -->
+    <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h4 class="text-base font-bold text-slate-900">Katalog Komoditas Marketplace Aktif</h4>
+                <p class="text-xs text-slate-500">Jelajahi pasokan hasil panen langsung dari petani terverifikasi dengan stok dan harga riil.</p>
+            </div>
+        </div>
+        <a href="{{ route('marketplace.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition whitespace-nowrap">
+            <span>Buka Marketplace</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </a>
+    </div>
+
     <!-- Collector Profile Summary -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex items-center gap-4">

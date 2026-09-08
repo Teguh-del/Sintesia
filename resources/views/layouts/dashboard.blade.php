@@ -66,26 +66,26 @@
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Dashboard Petani</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <a href="{{ route('farmer.harvests.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.harvests.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="wheat" class="w-5 h-5"></i>
                         <span>Hasil Panen</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 3</span>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <a href="{{ route('farmer.stocks.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.stocks.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="boxes" class="w-5 h-5"></i>
                         <span>Manajemen Stok</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 3</span>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <a href="{{ route('farmer.products.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.products.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="store" class="w-5 h-5"></i>
                         <span>Produk Marketplace</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 2</span>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
                 <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
                     <div class="flex items-center gap-3">
@@ -114,12 +114,12 @@
                     </div>
                     <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 5</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <a href="{{ route('marketplace.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('marketplace.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                         <span>Katalog Marketplace</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 2</span>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
                 </a>
 
             @elseif(Auth::user()->role === 'konsumen')
@@ -127,12 +127,12 @@
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Dashboard Konsumen</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <a href="{{ route('marketplace.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('marketplace.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="shopping-cart" class="w-5 h-5"></i>
                         <span>Belanja Komoditas</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 2</span>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
                 </a>
                 <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
                     <div class="flex items-center gap-3">

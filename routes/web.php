@@ -5,6 +5,10 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Collector\CollectorDashboardController;
 use App\Http\Controllers\Consumer\ConsumerDashboardController;
 use App\Http\Controllers\Farmer\FarmerDashboardController;
+use App\Http\Controllers\Farmer\FarmerHarvestController;
+use App\Http\Controllers\Farmer\FarmerProductController;
+use App\Http\Controllers\Farmer\FarmerStockController;
+use App\Http\Controllers\MarketplaceController;
 use App\Models\Commodity;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +23,12 @@ Route::get('/', function () {
     $commodities = Commodity::where('is_active', true)->get();
     return view('welcome', compact('commodities'));
 })->name('home');
+
+// Public Marketplace Routes
+Route::prefix('marketplace')->name('marketplace.')->group(function () {
+    Route::get('/', [MarketplaceController::class, 'index'])->name('index');
+    Route::get('/{slug}', [MarketplaceController::class, 'show'])->name('show');
+});
 
 // Guest Authentication Routes
 Route::middleware('guest')->group(function () {
@@ -36,6 +46,18 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 // 1. Petani
 Route::middleware(['auth', 'role:petani'])->prefix('farmer')->name('farmer.')->group(function () {
     Route::get('/dashboard', [FarmerDashboardController::class, 'index'])->name('dashboard');
+    
+    // Farmer Harvest Management (Phase 3)
+    Route::resource('harvests', FarmerHarvestController::class)->except(['show']);
+
+    // Farmer Stock Management (Phase 3)
+    Route::get('stocks', [FarmerStockController::class, 'index'])->name('stocks.index');
+    Route::get('stocks/{stock}', [FarmerStockController::class, 'show'])->name('stocks.show');
+    Route::patch('stocks/{stock}/adjust', [FarmerStockController::class, 'adjust'])->name('stocks.adjust');
+
+    // Farmer Product Management (Phase 2)
+    Route::resource('products', FarmerProductController::class)->except(['show']);
+    Route::patch('products/{product}/toggle', [FarmerProductController::class, 'toggleStatus'])->name('products.toggle');
 });
 
 // 2. Pengepul

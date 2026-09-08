@@ -58,6 +58,10 @@
 
                 <!-- Nav Links -->
                 <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-600">
+                    <a href="{{ route('marketplace.index') }}" class="{{ request()->routeIs('marketplace.*') ? 'text-emerald-600 font-bold' : 'hover:text-emerald-600' }} transition flex items-center gap-1.5">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                        <span>Marketplace</span>
+                    </a>
                     <a href="{{ route('home') }}#tentang" class="hover:text-emerald-600 transition">Tentang</a>
                     <a href="{{ route('home') }}#alur-kerja" class="hover:text-emerald-600 transition">Alur Niaga</a>
                     <a href="{{ route('home') }}#fitur" class="hover:text-emerald-600 transition">Fitur Unggulan</a>
