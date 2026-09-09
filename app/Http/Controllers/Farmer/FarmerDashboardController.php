@@ -24,6 +24,10 @@ class FarmerDashboardController extends Controller
         $totalStock = $user->products()->sum('stock');
         $recentProducts = $user->products()->with(['commodity', 'images'])->latest()->take(4)->get();
 
+        $pendingOrdersCount = $user->sellerOrders()->where('status', 'Menunggu Konfirmasi')->count();
+        $totalOrdersCount = $user->sellerOrders()->count();
+        $recentOrders = $user->sellerOrders()->with(['buyer', 'items'])->latest()->take(4)->get();
+
         return view('farmer.dashboard', compact(
             'user',
             'commodities',
@@ -34,7 +38,10 @@ class FarmerDashboardController extends Controller
             'totalProducts',
             'activeProducts',
             'totalStock',
-            'recentProducts'
+            'recentProducts',
+            'pendingOrdersCount',
+            'totalOrdersCount',
+            'recentOrders'
         ));
     }
 }

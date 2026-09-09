@@ -101,6 +101,26 @@ class User extends Authenticatable
         return $this->hasMany(Stock::class);
     }
 
+    public function buyerOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'buyer_id');
+    }
+
+    public function sellerOrders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'seller_id');
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class)->latest();
+    }
+
+    public function unreadNotifications(): HasMany
+    {
+        return $this->hasMany(Notification::class)->where('is_read', false)->latest();
+    }
+
     /**
      * Get user dashboard route based on role.
      */

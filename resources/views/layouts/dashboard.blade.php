@@ -87,6 +87,21 @@
                     </div>
                     <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
+                <!-- Farmer Orders (Phase 4) -->
+                <a href="{{ route('farmer.orders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.orders.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="inbox" class="w-5 h-5"></i>
+                        <span>Pesanan Masuk</span>
+                    </div>
+                    @php
+                        $pendingCount = \App\Models\Order::where('seller_id', Auth::id())->where('status', 'Menunggu Konfirmasi')->count();
+                    @endphp
+                    @if($pendingCount > 0)
+                        <span class="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">{{ $pendingCount }}</span>
+                    @else
+                        <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
+                    @endif
+                </a>
                 <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
                     <div class="flex items-center gap-3">
                         <i data-lucide="calendar-clock" class="w-5 h-5"></i>
@@ -99,6 +114,14 @@
                 <a href="{{ route('collector.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('collector.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Dashboard Pengepul</span>
+                </a>
+                <!-- Pengepul Orders (Phase 4) -->
+                <a href="{{ route('orders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('orders.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="receipt" class="w-5 h-5"></i>
+                        <span>Pesanan Saya</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
                 <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
                     <div class="flex items-center gap-3">
@@ -134,6 +157,14 @@
                     </div>
                     <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
                 </a>
+                <!-- Konsumen Orders (Phase 4) -->
+                <a href="{{ route('orders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('orders.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="receipt" class="w-5 h-5"></i>
+                        <span>Pesanan Saya</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
+                </a>
                 <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
                     <div class="flex items-center gap-3">
                         <i data-lucide="clock" class="w-5 h-5"></i>
@@ -162,6 +193,20 @@
                     <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 8</span>
                 </a>
             @endif
+
+            <!-- Common Notification Link -->
+            <a href="{{ route('notifications.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('notifications.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    <span>Notifikasi</span>
+                </div>
+                @php
+                    $unreadCount = \App\Models\Notification::where('user_id', Auth::id())->where('is_read', false)->count();
+                @endphp
+                @if($unreadCount > 0)
+                    <span class="text-[10px] font-bold bg-rose-500 text-white px-2 py-0.5 rounded-full">{{ $unreadCount }}</span>
+                @endif
+            </a>
 
             <div class="pt-4 px-3 pb-2 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Ekosistem SINTESA</div>
             <a href="{{ route('home') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800 hover:text-white transition">
@@ -207,6 +252,17 @@
             </div>
 
             <div class="flex items-center gap-3">
+                <!-- Notifications Bell -->
+                <a href="{{ route('notifications.index') }}" class="relative p-2 rounded-xl text-slate-500 hover:bg-slate-100 hover:text-slate-800 transition" title="Notifikasi">
+                    <i data-lucide="bell" class="w-5 h-5"></i>
+                    @php
+                        $unreadTopCount = \App\Models\Notification::where('user_id', Auth::id())->where('is_read', false)->count();
+                    @endphp
+                    @if($unreadTopCount > 0)
+                        <span class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-white"></span>
+                    @endif
+                </a>
+
                 <div class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
                     {{ Auth::user()->role === 'admin' ? 'bg-purple-100 text-purple-700' : '' }}
                     {{ Auth::user()->role === 'petani' ? 'bg-emerald-100 text-emerald-700' : '' }}

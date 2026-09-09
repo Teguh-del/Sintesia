@@ -58,6 +58,33 @@ Route::middleware(['auth', 'role:petani'])->prefix('farmer')->name('farmer.')->g
     // Farmer Product Management (Phase 2)
     Route::resource('products', FarmerProductController::class)->except(['show']);
     Route::patch('products/{product}/toggle', [FarmerProductController::class, 'toggleStatus'])->name('products.toggle');
+
+    // Farmer Orders Management (Phase 4)
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Farmer\FarmerOrderController::class, 'index'])->name('index');
+        Route::get('/{order}', [\App\Http\Controllers\Farmer\FarmerOrderController::class, 'show'])->name('show');
+        Route::post('/{order}/confirm', [\App\Http\Controllers\Farmer\FarmerOrderController::class, 'confirm'])->name('confirm');
+        Route::post('/{order}/process', [\App\Http\Controllers\Farmer\FarmerOrderController::class, 'process'])->name('process');
+        Route::post('/{order}/complete', [\App\Http\Controllers\Farmer\FarmerOrderController::class, 'complete'])->name('complete');
+        Route::post('/{order}/reject', [\App\Http\Controllers\Farmer\FarmerOrderController::class, 'reject'])->name('reject');
+    });
+});
+
+// Authenticated Order & Notification Routes (Phase 4 - Buyers & Global)
+Route::middleware('auth')->group(function () {
+    Route::prefix('orders')->name('orders.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\OrderController::class, 'index'])->name('index');
+        Route::post('/', [\App\Http\Controllers\OrderController::class, 'store'])->name('store');
+        Route::get('/{order}', [\App\Http\Controllers\OrderController::class, 'show'])->name('show');
+        Route::post('/{order}/cancel', [\App\Http\Controllers\OrderController::class, 'cancel'])->name('cancel');
+        Route::post('/{order}/receive', [\App\Http\Controllers\OrderController::class, 'receive'])->name('receive');
+    });
+
+    Route::prefix('notifications')->name('notifications.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index'])->name('index');
+        Route::post('/{notification}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('read');
+        Route::post('/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('readAll');
+    });
 });
 
 // 2. Pengepul

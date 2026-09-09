@@ -342,27 +342,127 @@
     </div>
 </div>
 
-<!-- Modal Beli Langsung (Informative Dialog for Phase 2) -->
-<div id="order-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
-            <i data-lucide="shopping-bag" class="w-6 h-6"></i>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900">Konfirmasi Pemesanan Langsung</h3>
-        <p class="text-sm text-slate-600">
-            Anda akan memesan <strong id="modal-order-qty">1</strong> {{ $product->unit }} <strong>{{ $product->name }}</strong> seharga <strong id="modal-order-price" class="text-emerald-700">Rp 0</strong> langsung dari petani <strong>{{ $product->user->name }}</strong>.
-        </p>
-        <div class="p-3 bg-slate-50 rounded-xl text-xs text-slate-500 border border-slate-200">
-            <p><strong>Catatan:</strong> Fitur transaksi lengkap dan invoice otomatis akan diintegrasikan pada <em>Phase 4 (Order & Transaction)</em>. Pesanan ini akan tercatat dalam ekosistem SINTESA.</p>
-        </div>
-        <div class="flex items-center gap-3 pt-2">
-            <button type="button" onclick="closeOrderModal()" class="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
-                Batal
-            </button>
-            <button type="button" onclick="alert('Pesanan berhasil dicatat! Notifikasi telah dikirimkan ke Petani {{ $product->user->name }}.'); closeOrderModal();" class="flex-1 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition">
-                Konfirmasi Pesanan
+<!-- Modal Beli Langsung (Phase 4 Real Checkout) -->
+<div id="order-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <i data-lucide="shopping-cart" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Konfirmasi Pemesanan Komoditas</h3>
+                    <p class="text-xs text-slate-500">Transaksi langsung dengan petani terdaftar SINTESA</p>
+                </div>
+            </div>
+            <button type="button" onclick="closeOrderModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
+
+        <form action="{{ route('orders.store') }}" method="POST" class="space-y-4">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+            <!-- Product Summary -->
+            <div class="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/80 flex items-center gap-3">
+                <img src="{{ $product->primary_image_url }}" alt="{{ $product->name }}" class="w-14 h-14 rounded-xl object-cover border border-slate-200">
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-bold text-slate-900 truncate">{{ $product->name }}</h4>
+                    <p class="text-xs text-slate-500">Petani: <span class="font-semibold text-slate-700">{{ $product->user->name }}</span></p>
+                    <p class="text-xs font-bold text-emerald-600">{{ $product->formatted_price }} <span class="text-[10px] text-slate-400 font-normal">/ {{ $product->unit }}</span></p>
+                </div>
+            </div>
+
+            <!-- Quantity Input -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Jumlah Pesanan ({{ $product->unit }}) <span class="text-rose-500">*</span>
+                </label>
+                <div class="flex items-center gap-2">
+                    <input type="number" id="form-order-qty" name="quantity" 
+                           step="any"
+                           min="{{ $product->min_order }}" 
+                           max="{{ $product->stock }}"
+                           value="{{ max(1, $product->min_order) }}"
+                           oninput="updateModalSubtotal()"
+                           required
+                           class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <span class="text-xs font-semibold text-slate-500">{{ $product->unit }}</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-1">
+                    Min: {{ number_format($product->min_order, 0, ',', '.') }} {{ $product->unit }} | Tersedia: {{ number_format($product->stock, 0, ',', '.') }} {{ $product->unit }}
+                </p>
+            </div>
+
+            <!-- Shipping Method -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Metode Pengambilan / Pengiriman <span class="text-rose-500">*</span>
+                </label>
+                <select name="shipping_method" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <option value="Ambil di Lokasi Petani">Ambil Sendiri di Lokasi Petani ({{ $product->location }})</option>
+                    <option value="Pengiriman / Kurir">Kirim ke Alamat Pembeli (Kurir / Ekspedisi Lokal)</option>
+                </select>
+            </div>
+
+            <!-- Payment Method -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Metode Pembayaran <span class="text-rose-500">*</span>
+                </label>
+                <select name="payment_method" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    <option value="Transfer Bank / Rekber SINTESA">Transfer Bank (Rekening Bersama SINTESA)</option>
+                    <option value="Tunai / COD saat Timbang">Tunai / Bayar di Tempat (Saat Timbang & Serah Terima)</option>
+                </select>
+            </div>
+
+            <!-- Shipping Address -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Alamat Pengiriman / Domisili Pembeli <span class="text-rose-500">*</span>
+                </label>
+                <textarea name="shipping_address" rows="2" required 
+                          class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                          placeholder="Masukkan alamat lengkap pengiriman">{{ Auth::user()?->consumerProfile?->address ?? (Auth::user()?->collectorProfile?->address ?? '') }}</textarea>
+            </div>
+
+            <!-- Notes -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Catatan untuk Petani <span class="text-slate-400 text-[10px] font-normal">(Opsional)</span>
+                </label>
+                <input type="text" name="notes" 
+                       class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                       placeholder="Contoh: Kemasan karung bersih, tiba pagi hari">
+            </div>
+
+            <!-- Price Breakdown Summary -->
+            <div class="p-4 bg-emerald-50/70 border border-emerald-200 rounded-2xl space-y-2">
+                <div class="flex justify-between text-xs text-slate-600">
+                    <span>Estimasi Subtotal Komoditas:</span>
+                    <span id="modal-subtotal-text" class="font-bold text-slate-900">Rp 0</span>
+                </div>
+                <div class="flex justify-between text-xs text-slate-600">
+                    <span>Biaya Layanan SINTESA:</span>
+                    <span class="font-bold text-emerald-700">Gratis (Phase 4)</span>
+                </div>
+                <div class="pt-2 border-t border-emerald-200/80 flex justify-between items-baseline">
+                    <span class="text-sm font-bold text-slate-900">Total Pembayaran:</span>
+                    <span id="modal-total-text" class="text-lg font-black text-emerald-700">Rp 0</span>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-3 pt-3">
+                <button type="button" onclick="closeOrderModal()" class="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
+                    Batal
+                </button>
+                <button type="submit" class="flex-1 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition flex items-center justify-center gap-2">
+                    <i data-lucide="check-circle" class="w-4 h-4"></i>
+                    <span>Kirim Pesanan</span>
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -446,11 +546,20 @@
     }
 
     function openOrderModal() {
-        const qty = document.getElementById('calc-quantity').value;
-        const subtotal = Math.max(0, qty) * unitPrice;
-        document.getElementById('modal-order-qty').textContent = qty;
-        document.getElementById('modal-order-price').textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal);
+        const qty = parseFloat(document.getElementById('calc-quantity').value) || minOrder;
+        document.getElementById('form-order-qty').value = qty;
+        updateModalSubtotal();
         document.getElementById('order-modal').classList.remove('hidden');
+    }
+
+    function updateModalSubtotal() {
+        const formQty = parseFloat(document.getElementById('form-order-qty').value) || 0;
+        const subtotal = Math.max(0, formQty) * unitPrice;
+        const formatted = 'Rp ' + new Intl.NumberFormat('id-ID').format(subtotal);
+        const subtotalEl = document.getElementById('modal-subtotal-text');
+        const totalEl = document.getElementById('modal-total-text');
+        if (subtotalEl) subtotalEl.textContent = formatted;
+        if (totalEl) totalEl.textContent = formatted;
     }
 
     function closeOrderModal() {
