@@ -102,12 +102,36 @@
                         <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                     @endif
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <!-- Farmer Negotiations (Phase 5) -->
+                <a href="{{ route('farmer.negotiations.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.negotiations.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="handshake" class="w-5 h-5"></i>
+                        <span>Negosiasi Masuk</span>
+                    </div>
+                    @php
+                        $pendingNegoCount = \App\Models\PriceOffer::where('seller_id', Auth::id())->where('status', 'Menunggu')->count();
+                    @endphp
+                    @if($pendingNegoCount > 0)
+                        <span class="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">{{ $pendingNegoCount }}</span>
+                    @else
+                        <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
+                    @endif
+                </a>
+                <!-- Farmer Commodity Requests (Phase 5) -->
+                <a href="{{ route('farmer.requests.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.requests.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                        <span>Bursa Permintaan</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
+                </a>
+                <!-- Farmer Pre-Orders (Phase 5) -->
+                <a href="{{ route('farmer.preorders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.preorders.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="calendar-clock" class="w-5 h-5"></i>
-                        <span>Buka Pre-Order</span>
+                        <span>Kampanye Pre-Order</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 5</span>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
 
             @elseif(Auth::user()->role === 'pengepul')
@@ -123,19 +147,36 @@
                     </div>
                     <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <!-- Negotiations (Phase 5) -->
+                <a href="{{ route('negotiations.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('negotiations.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
-                        <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
-                        <span>SINTESA Match</span>
+                        <i data-lucide="handshake" class="w-5 h-5"></i>
+                        <span>Negosiasi Harga</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 6</span>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <!-- Commodity Requests (Phase 5) -->
+                <a href="{{ route('requests.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('requests.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="clipboard-list" class="w-5 h-5"></i>
-                        <span>Permintaan Komoditas</span>
+                        <span>Permintaan Pasokan</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 5</span>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
+                </a>
+                <!-- Preorders (Phase 5) -->
+                <a href="{{ route('preorders.my') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('preorders.my') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="calendar-clock" class="w-5 h-5"></i>
+                        <span>Pre-Order Saya</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
+                </a>
+                <a href="{{ route('preorders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('preorders.index') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="calendar-search" class="w-5 h-5"></i>
+                        <span>Katalog Pre-Order</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
                 </a>
                 <a href="{{ route('marketplace.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('marketplace.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
@@ -143,6 +184,13 @@
                         <span>Katalog Marketplace</span>
                     </div>
                     <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
+                </a>
+                <a href="{{ route('matching.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('matching.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
+                        <span>SINTESA Match</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md">Smart Match</span>
                 </a>
 
             @elseif(Auth::user()->role === 'konsumen')
@@ -157,6 +205,14 @@
                     </div>
                     <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
                 </a>
+                <!-- SINTESA Match for Konsumen (Phase 6) -->
+                <a href="{{ route('matching.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('matching.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
+                        <span>SINTESA Match</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md">Smart Match</span>
+                </a>
                 <!-- Konsumen Orders (Phase 4) -->
                 <a href="{{ route('orders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('orders.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
@@ -165,32 +221,77 @@
                     </div>
                     <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <!-- Negotiations (Phase 5) -->
+                <a href="{{ route('negotiations.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('negotiations.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="handshake" class="w-5 h-5"></i>
+                        <span>Negosiasi Harga</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
+                </a>
+                <!-- Commodity Requests (Phase 5) -->
+                <a href="{{ route('requests.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('requests.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                        <span>Permintaan Komoditas</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
+                </a>
+                <!-- Preorders (Phase 5) -->
+                <a href="{{ route('preorders.my') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('preorders.my') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="clock" class="w-5 h-5"></i>
                         <span>Pre-Order Saya</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 5</span>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
+                </a>
+                <a href="{{ route('preorders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('preorders.index') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="calendar-search" class="w-5 h-5"></i>
+                        <span>Katalog Pre-Order</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
                 </a>
 
             @elseif(Auth::user()->role === 'admin')
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.dashboard') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Overview Sistem</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <a href="{{ route('admin.users.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.users.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
-                        <i data-lucide="users" class="w-5 h-5"></i>
+                        <i data-lucide="users" class="w-5 h-5 text-purple-400"></i>
                         <span>Kelola Pengguna</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 8</span>
+                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
                 </a>
-                <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800/60 hover:text-slate-200 transition opacity-80">
+                <a href="{{ route('admin.commodities.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.commodities.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
-                        <i data-lucide="apple" class="w-5 h-5"></i>
+                        <i data-lucide="sprout" class="w-5 h-5 text-emerald-400"></i>
                         <span>Master Komoditas</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-slate-800 text-slate-400 px-2 py-0.5 rounded-md">Phase 8</span>
+                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
+                </a>
+                <a href="{{ route('admin.products.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.products.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-400"></i>
+                        <span>Moderasi Produk</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
+                </a>
+                <a href="{{ route('admin.transactions.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.transactions.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="receipt" class="w-5 h-5 text-blue-400"></i>
+                        <span>Monitor Transaksi</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
+                </a>
+                <a href="{{ route('admin.prices.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.prices.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="tag" class="w-5 h-5 text-purple-400"></i>
+                        <span>Kelola Harga Pasar</span>
+                    </div>
+                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
                 </a>
             @endif
 
@@ -206,6 +307,23 @@
                 @if($unreadCount > 0)
                     <span class="text-[10px] font-bold bg-rose-500 text-white px-2 py-0.5 rounded-full">{{ $unreadCount }}</span>
                 @endif
+            </a>
+
+            <!-- Phase 7: Maps & Price Analytics -->
+            <div class="pt-4 px-3 pb-2 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Peta & Pasar (Phase 7)</div>
+            <a href="{{ route('maps.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('maps.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="map" class="w-5 h-5 text-emerald-400"></i>
+                    <span>Peta Sebaran Petani</span>
+                </div>
+                <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Geospasial</span>
+            </a>
+            <a href="{{ route('prices.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('prices.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                <div class="flex items-center gap-3">
+                    <i data-lucide="line-chart" class="w-5 h-5 text-teal-400"></i>
+                    <span>Tren Harga Pasar</span>
+                </div>
+                <span class="text-[10px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30 px-2 py-0.5 rounded-md">Chart</span>
             </a>
 
             <div class="pt-4 px-3 pb-2 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Ekosistem SINTESA</div>

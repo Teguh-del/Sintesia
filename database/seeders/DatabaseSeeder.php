@@ -14,8 +14,12 @@ class DatabaseSeeder extends Seeder
         $this->call([
             CommoditySeeder::class,
             UserSeeder::class,
-            HarvestStockSeeder::class,
             ProductSeeder::class,
+            HarvestStockSeeder::class,
+            OrderSeeder::class,
+            PhaseFiveSeeder::class,
+            PhaseSixMatchingSeeder::class,
+            PhaseSevenMapPriceSeeder::class,
         ]);
     }
 }

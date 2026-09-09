@@ -67,15 +67,18 @@ class FarmerOrderController extends Controller
      */
     public function show(Order $order): View
     {
-        $user = Auth::user();
+        $this->authorize('view', $order);
 
-        if ($order->seller_id !== $user->id) {
+        if ($order->seller_id !== Auth::id()) {
             abort(403, 'Anda tidak memiliki akses ke pesanan ini.');
         }
 
         $order->load(['buyer.consumerProfile', 'buyer.collectorProfile', 'items.product.stock', 'transactions']);
 
-        return view('farmer.orders.show', compact('order', 'user'));
+        return view('farmer.orders.show', [
+            'order' => $order,
+            'user' => Auth::user(),
+        ]);
     }
 
     /**
@@ -83,10 +86,10 @@ class FarmerOrderController extends Controller
      */
     public function confirm(Order $order): RedirectResponse
     {
-        $user = Auth::user();
+        $this->authorize('confirm', $order);
 
         try {
-            $this->orderService->confirmOrder($order, $user);
+            $this->orderService->confirmOrder($order, Auth::user());
 
             return back()->with('success', "Pesanan #{$order->order_number} berhasil dikonfirmasi! Silakan siapkan komoditas untuk diproses.");
         } catch (\Exception $e) {
@@ -99,10 +102,10 @@ class FarmerOrderController extends Controller
      */
     public function process(Order $order): RedirectResponse
     {
-        $user = Auth::user();
+        $this->authorize('process', $order);
 
         try {
-            $this->orderService->processOrder($order, $user);
+            $this->orderService->processOrder($order, Auth::user());
 
             return back()->with('success', "Status pesanan #{$order->order_number} diperbarui menjadi 'Diproses'.");
         } catch (\Exception $e) {
@@ -115,10 +118,10 @@ class FarmerOrderController extends Controller
      */
     public function complete(Order $order): RedirectResponse
     {
-        $user = Auth::user();
+        $this->authorize('complete', $order);
 
         try {
-            $this->orderService->completeOrder($order, $user);
+            $this->orderService->completeOrder($order, Auth::user());
 
             return back()->with('success', "Pesanan #{$order->order_number} berhasil diselesaikan. Penjualan telah tercatat dalam inventaris.");
         } catch (\Exception $e) {
@@ -131,7 +134,7 @@ class FarmerOrderController extends Controller
      */
     public function reject(Request $request, Order $order): RedirectResponse
     {
-        $user = Auth::user();
+        $this->authorize('cancel', $order);
 
         $request->validate([
             'reason' => ['required', 'string', 'max:500'],
@@ -140,7 +143,7 @@ class FarmerOrderController extends Controller
         ]);
 
         try {
-            $this->orderService->cancelOrder($order, $user, $request->input('reason'));
+            $this->orderService->cancelOrder($order, Auth::user(), $request->input('reason'));
 
             return back()->with('success', "Pesanan #{$order->order_number} berhasil ditolak. Kuantitas stok telah dikembalikan ke stok aktif Anda.");
         } catch (\Exception $e) {

@@ -40,4 +40,9 @@ class Commodity extends Model
     {
         return $this->hasMany(Stock::class);
     }
+
+    public function prices(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CommodityPrice::class);
+    }
 }

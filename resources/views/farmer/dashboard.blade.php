@@ -59,7 +59,7 @@
         </div>
     </div>
 
-    <!-- Product, Harvest & Stock Metrics (Phase 2 & 3 Real Data) -->
+    <!-- Product, Harvest, Stock & Order Metrics (Real System Data) -->
     <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
             <div>
@@ -89,35 +89,119 @@
 
         <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
             <div>
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Produk Aktif Dijual</p>
-                <p class="text-2xl font-black text-slate-900 mt-1">{{ $activeProducts }} <span class="text-xs font-normal text-slate-400">/ {{ $totalProducts }}</span></p>
-                <a href="{{ route('farmer.products.index') }}" class="text-[11px] font-bold text-emerald-600 hover:underline inline-block mt-1">
-                    Katalog Produk &rarr;
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pesanan Masuk</p>
+                <div class="flex items-baseline gap-2 mt-1">
+                    <p class="text-2xl font-black text-amber-600">{{ $pendingOrdersCount }}</p>
+                    <span class="text-xs font-semibold text-slate-400">/ {{ $totalOrdersCount }} Total</span>
+                </div>
+                <a href="{{ route('farmer.orders.index') }}" class="text-[11px] font-bold text-amber-600 hover:underline inline-block mt-1">
+                    Kelola Pesanan &rarr;
                 </a>
             </div>
             <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-                <i data-lucide="store" class="w-5 h-5"></i>
+                <i data-lucide="inbox" class="w-5 h-5"></i>
             </div>
         </div>
 
         <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
             <div>
-                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Aksi Cepat</p>
-                <div class="flex flex-col gap-1 mt-1.5">
-                    <a href="{{ route('farmer.harvests.create') }}" class="text-[11px] font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1">
-                        <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
-                        <span>Catat Panen</span>
-                    </a>
-                    <a href="{{ route('farmer.products.create') }}" class="text-[11px] font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1">
-                        <i data-lucide="tag" class="w-3.5 h-3.5"></i>
-                        <span>Jual Produk</span>
-                    </a>
-                </div>
+                <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Penjualan Selesai</p>
+                <p class="text-xl font-black text-slate-900 mt-1">Rp {{ number_format($totalSalesRevenue, 0, ',', '.') }}</p>
+                <a href="{{ route('farmer.orders.index', ['status' => 'Selesai']) }}" class="text-[11px] font-bold text-emerald-600 hover:underline inline-block mt-1">
+                    Riwayat Transaksi &rarr;
+                </a>
             </div>
             <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
-                <i data-lucide="zap" class="w-5 h-5"></i>
+                <i data-lucide="badge-check" class="w-5 h-5"></i>
             </div>
         </div>
+    </div>
+
+    <!-- Recent Orders Section (Phase 4 Real Data) -->
+    <div class="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm">
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                    <i data-lucide="receipt" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">Pesanan Masuk Terbaru</h3>
+                    <p class="text-xs text-slate-500">Daftar transaksi komoditas dari pembeli yang memerlukan perhatian Anda</p>
+                </div>
+            </div>
+            <a href="{{ route('farmer.orders.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
+                <span>Lihat Semua Pesanan</span>
+                <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </a>
+        </div>
+
+        @if($recentOrders->count() > 0)
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="border-b border-slate-100 text-slate-400 font-bold uppercase tracking-wider">
+                            <th class="pb-3 px-3">No. Pesanan</th>
+                            <th class="pb-3 px-3">Pembeli</th>
+                            <th class="pb-3 px-3">Komoditas / Item</th>
+                            <th class="pb-3 px-3">Total Nilai</th>
+                            <th class="pb-3 px-3">Status</th>
+                            <th class="pb-3 px-3 text-right">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 font-medium text-slate-700">
+                        @foreach($recentOrders as $order)
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="py-3 px-3">
+                                <span class="font-bold text-slate-900">#{{ $order->order_number }}</span>
+                                <p class="text-[10px] text-slate-400">{{ $order->created_at->diffForHumans() }}</p>
+                            </td>
+                            <td class="py-3 px-3">
+                                <span class="font-bold text-slate-800">{{ $order->buyer->name }}</span>
+                                <span class="inline-block text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 ml-1">
+                                    {{ ucfirst($order->buyer->role) }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-3">
+                                @foreach($order->items as $item)
+                                    <p class="truncate max-w-[200px]">{{ $item->product_name }} ({{ number_format($item->quantity, 0) }} {{ $item->unit }})</p>
+                                @endforeach
+                            </td>
+                            <td class="py-3 px-3 font-bold text-slate-900">
+                                Rp {{ number_format($order->total_amount, 0, ',', '.') }}
+                            </td>
+                            <td class="py-3 px-3">
+                                @php
+                                    $statusClasses = [
+                                        'Menunggu Konfirmasi' => 'bg-amber-100 text-amber-800 border-amber-200',
+                                        'Dikonfirmasi' => 'bg-blue-100 text-blue-800 border-blue-200',
+                                        'Diproses' => 'bg-indigo-100 text-indigo-800 border-indigo-200',
+                                        'Selesai' => 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                                        'Dibatalkan' => 'bg-rose-100 text-rose-800 border-rose-200',
+                                    ];
+                                @endphp
+                                <span class="inline-block px-2.5 py-1 rounded-full text-[11px] font-bold border {{ $statusClasses[$order->status] ?? 'bg-slate-100 text-slate-700' }}">
+                                    {{ $order->status }}
+                                </span>
+                            </td>
+                            <td class="py-3 px-3 text-right">
+                                <a href="{{ route('farmer.orders.show', $order) }}" 
+                                   class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 font-bold text-xs transition">
+                                    <span>Detail</span>
+                                    <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="py-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200">
+                <i data-lucide="inbox" class="w-10 h-10 text-slate-300 mx-auto mb-2"></i>
+                <h4 class="text-sm font-bold text-slate-700">Belum Ada Pesanan Masuk</h4>
+                <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">Pesanan dari pembeli di marketplace akan otomatis muncul di sini untuk dikonfirmasi dan diproses.</p>
+            </div>
+        @endif
     </div>
 
     <!-- Quick Actions & Roadmap -->

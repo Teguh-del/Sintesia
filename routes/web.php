@@ -68,10 +68,41 @@ Route::middleware(['auth', 'role:petani'])->prefix('farmer')->name('farmer.')->g
         Route::post('/{order}/complete', [\App\Http\Controllers\Farmer\FarmerOrderController::class, 'complete'])->name('complete');
         Route::post('/{order}/reject', [\App\Http\Controllers\Farmer\FarmerOrderController::class, 'reject'])->name('reject');
     });
+
+    // Farmer Negotiations Management (Phase 5)
+    Route::prefix('negotiations')->name('negotiations.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Farmer\FarmerNegotiationController::class, 'index'])->name('index');
+        Route::post('/{offer}/accept', [\App\Http\Controllers\Farmer\FarmerNegotiationController::class, 'accept'])->name('accept');
+        Route::post('/{offer}/counter', [\App\Http\Controllers\Farmer\FarmerNegotiationController::class, 'counter'])->name('counter');
+        Route::post('/{offer}/reject', [\App\Http\Controllers\Farmer\FarmerNegotiationController::class, 'reject'])->name('reject');
+    });
+
+    // Farmer Commodity Requests Market & Offers (Phase 5)
+    Route::prefix('requests')->name('requests.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Farmer\FarmerRequestController::class, 'index'])->name('index');
+        Route::get('/{commodityRequest}', [\App\Http\Controllers\Farmer\FarmerRequestController::class, 'show'])->name('show');
+        Route::post('/{commodityRequest}/offer', [\App\Http\Controllers\Farmer\FarmerRequestController::class, 'submitOffer'])->name('offer');
+    });
+
+    // Farmer Pre-Order Campaigns (Phase 5)
+    Route::prefix('preorders')->name('preorders.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'store'])->name('store');
+        Route::get('/{preorder}', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'show'])->name('show');
+        Route::post('/{preorder}/status', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'updateStatus'])->name('status');
+    });
 });
 
-// Authenticated Order & Notification Routes (Phase 4 - Buyers & Global)
+// Public Pre-Orders Catalog (Phase 5)
+Route::prefix('preorders')->name('preorders.')->group(function () {
+    Route::get('/', [\App\Http\Controllers\PreorderController::class, 'index'])->name('index');
+    Route::get('/{preorder:slug}', [\App\Http\Controllers\PreorderController::class, 'show'])->name('show');
+});
+
+// Authenticated User Routes (Phase 4 & Phase 5 - Buyers & General)
 Route::middleware('auth')->group(function () {
+    // Orders (Phase 4)
     Route::prefix('orders')->name('orders.')->group(function () {
         Route::get('/', [\App\Http\Controllers\OrderController::class, 'index'])->name('index');
         Route::post('/', [\App\Http\Controllers\OrderController::class, 'store'])->name('store');
@@ -80,11 +111,41 @@ Route::middleware('auth')->group(function () {
         Route::post('/{order}/receive', [\App\Http\Controllers\OrderController::class, 'receive'])->name('receive');
     });
 
+    // Notifications (Phase 4)
     Route::prefix('notifications')->name('notifications.')->group(function () {
         Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index'])->name('index');
         Route::post('/{notification}/read', [\App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('read');
         Route::post('/read-all', [\App\Http\Controllers\NotificationController::class, 'markAllAsRead'])->name('readAll');
     });
+
+    // Buyer Price Offers / Negotiations (Phase 5)
+    Route::prefix('negotiations')->name('negotiations.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\NegotiationController::class, 'index'])->name('index');
+    });
+    Route::prefix('offers')->name('offers.')->group(function () {
+        Route::post('/', [\App\Http\Controllers\NegotiationController::class, 'store'])->name('store');
+        Route::post('/{offer}/accept-counter', [\App\Http\Controllers\NegotiationController::class, 'acceptCounter'])->name('acceptCounter');
+        Route::post('/{offer}/reject', [\App\Http\Controllers\NegotiationController::class, 'reject'])->name('reject');
+    });
+
+    // Commodity Requests for Buyers (Phase 5)
+    Route::prefix('requests')->name('requests.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\CommodityRequestController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\CommodityRequestController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\CommodityRequestController::class, 'store'])->name('store');
+        Route::get('/{commodityRequest}', [\App\Http\Controllers\CommodityRequestController::class, 'show'])->name('show');
+        Route::post('/offers/{offer}/accept', [\App\Http\Controllers\CommodityRequestController::class, 'acceptOffer'])->name('acceptOffer');
+        Route::post('/offers/{offer}/reject', [\App\Http\Controllers\CommodityRequestController::class, 'rejectOffer'])->name('rejectOffer');
+        Route::post('/{commodityRequest}/close', [\App\Http\Controllers\CommodityRequestController::class, 'close'])->name('close');
+    });
+
+    // Pre-Order Bookings for Buyers (Phase 5)
+    Route::post('/preorders/{preorder:slug}/book', [\App\Http\Controllers\PreorderController::class, 'book'])->name('preorders.book');
+    Route::get('/my-preorders', [\App\Http\Controllers\PreorderController::class, 'myBookings'])->name('preorders.my');
+    Route::post('/my-preorders/{item}/cancel', [\App\Http\Controllers\PreorderController::class, 'cancelBooking'])->name('preorders.cancelBooking');
+
+    // SINTESA Match (Phase 6)
+    Route::get('/matching', [\App\Http\Controllers\MatchingController::class, 'index'])->name('matching.index');
 });
 
 // 2. Pengepul
@@ -100,4 +161,35 @@ Route::middleware(['auth', 'role:konsumen'])->prefix('consumer')->name('consumer
 // 4. Admin
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
+    
+    // User Management (Phase 8)
+    Route::get('/users', [\App\Http\Controllers\Admin\AdminUserController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}', [\App\Http\Controllers\Admin\AdminUserController::class, 'show'])->name('users.show');
+    Route::match(['post', 'patch'], '/users/{user}/toggle-status', [\App\Http\Controllers\Admin\AdminUserController::class, 'toggleStatus'])->name('users.toggle-status');
+
+    // Master Commodity Management (Phase 8)
+    Route::get('/commodities', [\App\Http\Controllers\Admin\AdminCommodityController::class, 'index'])->name('commodities.index');
+    Route::post('/commodities', [\App\Http\Controllers\Admin\AdminCommodityController::class, 'store'])->name('commodities.store');
+    Route::put('/commodities/{commodity}', [\App\Http\Controllers\Admin\AdminCommodityController::class, 'update'])->name('commodities.update');
+    Route::match(['post', 'patch'], '/commodities/{commodity}/toggle-status', [\App\Http\Controllers\Admin\AdminCommodityController::class, 'toggleStatus'])->name('commodities.toggle-status');
+
+    // Marketplace Product Moderation (Phase 8)
+    Route::get('/products', [\App\Http\Controllers\Admin\AdminProductController::class, 'index'])->name('products.index');
+    Route::match(['post', 'patch'], '/products/{product}/toggle-status', [\App\Http\Controllers\Admin\AdminProductController::class, 'toggleStatus'])->name('products.toggle-status');
+
+    // Transaction & Order Monitoring (Phase 8)
+    Route::get('/transactions', [\App\Http\Controllers\Admin\AdminTransactionController::class, 'index'])->name('transactions.index');
+    Route::get('/transactions/{order}', [\App\Http\Controllers\Admin\AdminTransactionController::class, 'show'])->name('transactions.show');
+
+    // Commodity Prices Management (Phase 7)
+    Route::resource('prices', \App\Http\Controllers\Admin\AdminCommodityPriceController::class);
+});
+
+// Phase 7: Interactive Agricultural Maps & Market Price Analytics
+Route::middleware('auth')->group(function () {
+    Route::get('/maps', [\App\Http\Controllers\MapController::class, 'index'])->name('maps.index');
+    Route::get('/api/maps/markers', [\App\Http\Controllers\MapController::class, 'getFarmerMarkers'])->name('maps.markers');
+
+    Route::get('/prices', [\App\Http\Controllers\PriceAnalyticsController::class, 'index'])->name('prices.index');
+    Route::get('/api/prices/chart-data', [\App\Http\Controllers\PriceAnalyticsController::class, 'chartData'])->name('prices.chart');
 });

@@ -90,16 +90,14 @@ class OrderController extends Controller
      */
     public function show(Order $order): View
     {
-        $user = Auth::user();
-
-        // Authorization check: only buyer, seller, or admin can view
-        if ($order->buyer_id !== $user->id && $order->seller_id !== $user->id && !$user->isAdmin()) {
-            abort(403, 'Anda tidak memiliki otorisasi untuk melihat detail pesanan ini.');
-        }
+        $this->authorize('view', $order);
 
         $order->load(['buyer.consumerProfile', 'buyer.collectorProfile', 'seller.farmerProfile', 'items.product', 'transactions']);
 
-        return view('orders.show', compact('order', 'user'));
+        return view('orders.show', [
+            'order' => $order,
+            'user' => Auth::user(),
+        ]);
     }
 
     /**
@@ -107,7 +105,7 @@ class OrderController extends Controller
      */
     public function cancel(Request $request, Order $order): RedirectResponse
     {
-        $user = Auth::user();
+        $this->authorize('cancel', $order);
 
         $request->validate([
             'reason' => ['required', 'string', 'max:500'],
@@ -116,7 +114,7 @@ class OrderController extends Controller
         ]);
 
         try {
-            $this->orderService->cancelOrder($order, $user, $request->input('reason'));
+            $this->orderService->cancelOrder($order, Auth::user(), $request->input('reason'));
 
             return back()->with('success', "Pesanan #{$order->order_number} telah berhasil dibatalkan dan stok dikembalikan.");
         } catch (\Exception $e) {
@@ -129,10 +127,10 @@ class OrderController extends Controller
      */
     public function receive(Order $order): RedirectResponse
     {
-        $user = Auth::user();
+        $this->authorize('complete', $order);
 
         try {
-            $this->orderService->completeOrder($order, $user);
+            $this->orderService->completeOrder($order, Auth::user());
 
             return back()->with('success', "Konfirmasi penerimaan berhasil! Transaksi #{$order->order_number} dinyatakan selesai.");
         } catch (\Exception $e) {

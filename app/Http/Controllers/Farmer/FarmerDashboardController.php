@@ -26,7 +26,8 @@ class FarmerDashboardController extends Controller
 
         $pendingOrdersCount = $user->sellerOrders()->where('status', 'Menunggu Konfirmasi')->count();
         $totalOrdersCount = $user->sellerOrders()->count();
-        $recentOrders = $user->sellerOrders()->with(['buyer', 'items'])->latest()->take(4)->get();
+        $totalSalesRevenue = $user->sellerOrders()->where('status', 'Selesai')->sum('total_amount');
+        $recentOrders = $user->sellerOrders()->with(['buyer.consumerProfile', 'buyer.collectorProfile', 'items'])->latest()->take(5)->get();
 
         return view('farmer.dashboard', compact(
             'user',
@@ -41,6 +42,7 @@ class FarmerDashboardController extends Controller
             'recentProducts',
             'pendingOrdersCount',
             'totalOrdersCount',
+            'totalSalesRevenue',
             'recentOrders'
         ));
     }

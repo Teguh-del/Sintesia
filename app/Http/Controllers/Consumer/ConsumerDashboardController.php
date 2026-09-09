@@ -14,6 +14,24 @@ class ConsumerDashboardController extends Controller
         $user = Auth::user()->load('consumerProfile');
         $commodities = Commodity::where('is_active', true)->get();
 
-        return view('consumer.dashboard', compact('user', 'commodities'));
+        $activeOrdersCount = $user->buyerOrders()->whereIn('status', ['Menunggu Konfirmasi', 'Dikonfirmasi', 'Diproses'])->count();
+        $totalOrdersCount = $user->buyerOrders()->count();
+        $totalSpending = $user->buyerOrders()->where('status', 'Selesai')->sum('total_amount');
+        $recentOrders = $user->buyerOrders()->with(['seller.farmerProfile', 'items'])->latest()->take(5)->get();
+
+        $topMatches = app(\App\Services\MatchingService::class)->findMatches([
+            'quantity' => 25,
+            'max_price' => 40000,
+        ], $user)->take(3);
+
+        return view('consumer.dashboard', compact(
+            'user',
+            'commodities',
+            'activeOrdersCount',
+            'totalOrdersCount',
+            'totalSpending',
+            'recentOrders',
+            'topMatches'
+        ));
     }
 }

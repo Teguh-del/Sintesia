@@ -71,6 +71,11 @@ class Order extends Model
         return $this->hasMany(Transaction::class);
     }
 
+    public function transaction(): HasOne
+    {
+        return $this->hasOne(Transaction::class)->latestOfMany();
+    }
+
     public function latestTransaction(): HasOne
     {
         return $this->hasOne(Transaction::class)->latestOfMany();

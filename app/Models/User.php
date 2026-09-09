@@ -121,6 +121,31 @@ class User extends Authenticatable
         return $this->hasMany(Notification::class)->where('is_read', false)->latest();
     }
 
+    public function commodityRequests(): HasMany
+    {
+        return $this->hasMany(CommodityRequest::class);
+    }
+
+    public function buyerPriceOffers(): HasMany
+    {
+        return $this->hasMany(PriceOffer::class, 'buyer_id');
+    }
+
+    public function sellerPriceOffers(): HasMany
+    {
+        return $this->hasMany(PriceOffer::class, 'seller_id');
+    }
+
+    public function preorders(): HasMany
+    {
+        return $this->hasMany(Preorder::class);
+    }
+
+    public function preorderItems(): HasMany
+    {
+        return $this->hasMany(PreorderItem::class, 'buyer_id');
+    }
+
     /**
      * Get user dashboard route based on role.
      */

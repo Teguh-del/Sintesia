@@ -466,37 +466,107 @@
     </div>
 </div>
 
-<!-- Modal Negosiasi (Informative Dialog for Phase 2) -->
-<div id="nego-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-        <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
-            <i data-lucide="handshake" class="w-6 h-6"></i>
-        </div>
-        <h3 class="text-lg font-bold text-slate-900">Ajukan Penawaran Harga (Nego)</h3>
-        <p class="text-sm text-slate-600">
-            Harga produk saat ini adalah <strong>{{ $product->formatted_price }} / {{ $product->unit }}</strong>.
-        </p>
-        <div class="space-y-3">
-            <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">Tawaran Harga per {{ $product->unit }} (Rp)</label>
-                <input type="number" id="nego-price-input" placeholder="Contoh: {{ (int)($product->price * 0.9) }}" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none">
+<!-- Modal Negosiasi (Phase 5 Real Negotiation Engine) -->
+<div id="nego-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 my-8">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                    <i data-lucide="handshake" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Ajukan Negosiasi Harga</h3>
+                    <p class="text-xs text-slate-500">Tawar harga komoditas langsung dengan Petani</p>
+                </div>
             </div>
-            <div>
-                <label class="block text-xs font-bold text-slate-700 mb-1">Catatan untuk Petani</label>
-                <textarea rows="2" placeholder="Tuliskan catatan kebutuhan volume, rencana pickup, dll..." class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none"></textarea>
-            </div>
-        </div>
-        <div class="p-3 bg-amber-50 rounded-xl text-xs text-amber-800 border border-amber-200">
-            <p><strong>Catatan:</strong> Modul negosiasi multi-step resmi akan diaktifkan secara komprehensif pada <em>Phase 5 (Negotiation & Pre-order)</em>.</p>
-        </div>
-        <div class="flex items-center gap-3 pt-2">
-            <button type="button" onclick="closeNegotiationModal()" class="flex-1 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
-                Batal
-            </button>
-            <button type="button" onclick="alert('Tawaran harga berhasil dikirimkan ke Petani {{ $product->user->name }}.'); closeNegotiationModal();" class="flex-1 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition">
-                Kirim Tawaran
+            <button type="button" onclick="closeNegotiationModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                <i data-lucide="x" class="w-5 h-5"></i>
             </button>
         </div>
+
+        <form action="{{ route('offers.store') }}" method="POST" class="space-y-4">
+            @csrf
+            <input type="hidden" name="product_id" value="{{ $product->id }}">
+
+            <!-- Product Summary -->
+            <div class="p-3.5 bg-amber-50/50 rounded-2xl border border-amber-200/60 flex items-center gap-3">
+                <img src="{{ $product->primary_image_url }}" alt="{{ $product->name }}" class="w-14 h-14 rounded-xl object-cover border border-amber-200">
+                <div class="flex-1 min-w-0">
+                    <h4 class="text-sm font-bold text-slate-900 truncate">{{ $product->name }}</h4>
+                    <p class="text-xs text-slate-500">Petani: <span class="font-semibold text-slate-700">{{ $product->user->name }}</span></p>
+                    <p class="text-xs text-slate-500">Harga Katalog: <span class="font-bold text-slate-800">{{ $product->formatted_price }} / {{ $product->unit }}</span></p>
+                </div>
+            </div>
+
+            <!-- Quantity Input -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Jumlah Volume Pembelian ({{ $product->unit }}) <span class="text-rose-500">*</span>
+                </label>
+                <div class="flex items-center gap-2">
+                    <input type="number" id="nego-quantity-input" name="quantity" 
+                           step="any"
+                           min="{{ $product->min_order }}" 
+                           max="{{ $product->stock }}"
+                           value="{{ max(1, $product->min_order) }}"
+                           required
+                           class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    <span class="text-xs font-semibold text-slate-500">{{ $product->unit }}</span>
+                </div>
+                <p class="text-[11px] text-slate-400 mt-1">
+                    Min order: {{ number_format($product->min_order, 0, ',', '.') }} {{ $product->unit }} | Stok: {{ number_format($product->stock, 0, ',', '.') }} {{ $product->unit }}
+                </p>
+            </div>
+
+            <!-- Offered Price -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Tawaran Harga Anda (Rp / {{ $product->unit }}) <span class="text-rose-500">*</span>
+                </label>
+                <div class="relative">
+                    <span class="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-bold text-slate-400">Rp</span>
+                    <input type="number" name="offered_price" 
+                           min="1"
+                           placeholder="Contoh: {{ (int)($product->price * 0.9) }}"
+                           required
+                           class="w-full pl-12 pr-4 py-2.5 rounded-xl border border-slate-300 text-sm font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                </div>
+                <p class="text-[11px] text-amber-700 mt-1">
+                    Tips: Ajukan tawaran yang wajar untuk memperbesar peluang disepakati petani.
+                </p>
+            </div>
+
+            <!-- Shipping Method -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Rencana Pengambilan / Pengiriman <span class="text-rose-500">*</span>
+                </label>
+                <select name="shipping_method" required class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500">
+                    <option value="Ambil di Lokasi Petani">Ambil Sendiri di Lokasi Petani ({{ $product->location }})</option>
+                    <option value="Pengiriman / Kurir">Kirim ke Alamat Pembeli (Kurir / Ekspedisi Lokal)</option>
+                </select>
+            </div>
+
+            <!-- Notes -->
+            <div>
+                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
+                    Catatan untuk Petani <span class="text-slate-400 text-[10px] font-normal">(Opsional)</span>
+                </label>
+                <textarea name="notes" rows="2" 
+                          class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                          placeholder="Jelaskan kesiapan armada pengangkutan, jadwal pickup, atau spesifikasi khusus"></textarea>
+            </div>
+
+            <div class="flex items-center gap-3 pt-3">
+                <button type="button" onclick="closeNegotiationModal()" class="flex-1 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
+                    Batal
+                </button>
+                <button type="submit" class="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs shadow-md shadow-amber-500/20 transition flex items-center justify-center gap-2">
+                    <i data-lucide="send" class="w-4 h-4"></i>
+                    <span>Kirim Penawaran</span>
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -567,6 +637,9 @@
     }
 
     function openNegotiationModal() {
+        const qty = parseFloat(document.getElementById('calc-quantity').value) || minOrder;
+        const negoQty = document.getElementById('nego-quantity-input');
+        if (negoQty) negoQty.value = qty;
         document.getElementById('nego-modal').classList.remove('hidden');
     }
 
