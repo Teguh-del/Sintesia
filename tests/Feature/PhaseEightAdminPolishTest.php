@@ -221,7 +221,7 @@ class PhaseEightAdminPolishTest extends TestCase
     public function test_admin_can_monitor_and_audit_transactions(): void
     {
         $admin = User::where('role', 'admin')->first();
-        $order = Order::first();
+        $order = Order::latest()->first();
         $this->assertNotNull($order, 'At least one order must exist in database.');
 
         // Index

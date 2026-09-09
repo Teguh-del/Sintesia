@@ -39,8 +39,18 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'register']);
 });
 
-// Authenticated Logout
+// Authenticated Logout & Universal Dashboard Redirect
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+Route::get('/dashboard', function () {
+    $user = auth()->user();
+    return match ($user->role ?? null) {
+        'petani' => redirect()->route('farmer.dashboard'),
+        'pengepul' => redirect()->route('collector.dashboard'),
+        'konsumen' => redirect()->route('consumer.dashboard'),
+        'admin' => redirect()->route('admin.dashboard'),
+        default => redirect()->route('home'),
+    };
+})->middleware('auth')->name('dashboard');
 
 // Role-Protected Dashboards
 // 1. Petani

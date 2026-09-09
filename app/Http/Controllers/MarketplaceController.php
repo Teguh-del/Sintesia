@@ -61,7 +61,10 @@ class MarketplaceController extends Controller
     public function show(string $slug): View
     {
         $product = Product::with(['commodity', 'user.farmerProfile', 'images'])
-            ->where('slug', $slug)
+            ->where(function ($q) use ($slug) {
+                $q->where('slug', $slug)
+                  ->orWhere('id', $slug);
+            })
             ->firstOrFail();
 
         // Related products in the same commodity

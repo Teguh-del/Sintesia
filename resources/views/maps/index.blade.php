@@ -34,9 +34,15 @@
         <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
             <div class="max-w-2xl space-y-2">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
-                    <i data-lucide="map" class="w-3.5 h-3.5 text-amber-400"></i>
-                    <span>Phase 7 — Geospasial Pertanian Cerdas</span>
+                <div class="flex items-center justify-between gap-4">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
+                        <i data-lucide="map" class="w-3.5 h-3.5 text-amber-400"></i>
+                        <span>Phase 7 — Geospasial Pertanian Cerdas</span>
+                    </div>
+                    <a href="{{ route('dashboard') }}" class="inline-flex sm:hidden items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition backdrop-blur-md">
+                        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+                        <span>Kembali</span>
+                    </a>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Peta Sebaran Petani & Komoditas</h1>
                 <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
@@ -44,8 +50,8 @@
                 </p>
             </div>
 
-            <!-- KPI Metric Badges -->
-            <div class="flex items-center gap-3">
+            <!-- KPI Metric Badges & Back Button -->
+            <div class="flex items-center flex-wrap gap-3">
                 <div class="px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[100px]">
                     <span class="text-2xl font-black text-emerald-400 block">{{ $summary['total_farmers'] }}</span>
                     <span class="text-[10px] text-slate-300 uppercase tracking-wider font-bold">Titik Lahan</span>
@@ -58,6 +64,10 @@
                     <span class="text-2xl font-black text-teal-300 block">{{ number_format($summary['total_stock'], 0) }}</span>
                     <span class="text-[10px] text-slate-300 uppercase tracking-wider font-bold">Total Stok (kg)</span>
                 </div>
+                <a href="{{ route('dashboard') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-bold transition backdrop-blur-md shrink-0">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>Kembali ke Dashboard</span>
+                </a>
             </div>
         </div>
     </div>

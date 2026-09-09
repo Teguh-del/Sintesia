@@ -102,7 +102,7 @@
                     </li>
                     <li class="flex items-start gap-3">
                         <i data-lucide="check-circle" class="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5"></i>
-                        <span><strong>Pre-Order Panen:</strong> Memberikan kepastian pasar sebelum hasil panen dipetik dari lahan.</span>
+                        <span><strong>Peta Geospasial &amp; Tren Harga:</strong> Pemetaan lahan pertanian dan analitik fluktuasi harga pasar secara transparan.</span>
                     </li>
                 </ul>
             </div>
@@ -127,7 +127,7 @@
 
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative">
                 <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 font-black text-sm flex items-center justify-center mb-4">2</span>
-                <h4 class="font-bold text-slate-900 mb-2">Permintaan & Katalog</h4>
+                <h4 class="font-bold text-slate-900 mb-2">Permintaan &amp; Katalog</h4>
                 <p class="text-xs text-slate-500 leading-relaxed">Pengepul memasang permintaan kuota komoditas, atau konsumen menelusuri produk segar langsung.</p>
             </div>
 
@@ -139,15 +139,96 @@
 
             <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm relative">
                 <span class="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 font-black text-sm flex items-center justify-center mb-4">4</span>
-                <h4 class="font-bold text-slate-900 mb-2">Kesepakatan & Pesanan</h4>
+                <h4 class="font-bold text-slate-900 mb-2">Kesepakatan &amp; Pesanan</h4>
                 <p class="text-xs text-slate-500 leading-relaxed">Negosiasi harga transparan disepakati, sistem mengonfirmasi order, dan stok terpotong otomatis secara aman.</p>
             </div>
         </div>
     </div>
 </section>
 
+<!-- Fitur Unggulan Section -->
+<section id="fitur" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-2">Inovasi Digital Pertanian</h2>
+            <p class="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">Fitur Unggulan Platform SINTESA</p>
+            <p class="text-sm text-slate-500 mt-3">Empat pilar utama yang mentransformasi ekosistem niaga komoditas hasil bumi secara cerdas, adil, dan transparan.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Feature 1 -->
+            <div class="p-6 rounded-3xl bg-slate-50 border border-slate-200 hover:border-emerald-300 hover:shadow-lg transition duration-200 flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center mb-5">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">SINTESA Match</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Mesin pencocokan cerdas dengan 4 kriteria tertimbang: Komoditas (35%), Stok (25%), Anggaran Harga (20%), dan Kedekatan Jarak Haversine (20%).
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-200/80 flex items-center gap-2 text-xs font-bold text-amber-700">
+                    <span>Multi-Criteria Ranking</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </div>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="p-6 rounded-3xl bg-slate-50 border border-slate-200 hover:border-emerald-300 hover:shadow-lg transition duration-200 flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-5">
+                        <i data-lucide="layers" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Panen &rarr; Stok &rarr; Pasar</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Siklus terintegrasi dari pencatatan hasil panen, otomatisasi nomor batch stok, alokasi inventaris, hingga penayangan produk siap transaksi tanpa risiko stok minus.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-200/80 flex items-center gap-2 text-xs font-bold text-emerald-700">
+                    <span>Atomic Stock Guarantee</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </div>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="p-6 rounded-3xl bg-slate-50 border border-slate-200 hover:border-emerald-300 hover:shadow-lg transition duration-200 flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-blue-100 text-blue-600 flex items-center justify-center mb-5">
+                        <i data-lucide="handshake" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Bursa Permintaan &amp; Nego</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Pengepul &amp; konsumen dapat menerbitkan tender kuota pasokan. Petani dapat merespons dengan penawaran kuantitas dan harga tawar bilateral.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-200/80 flex items-center gap-2 text-xs font-bold text-blue-700">
+                    <span>2-Way Direct Trade</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </div>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="p-6 rounded-3xl bg-slate-50 border border-slate-200 hover:border-emerald-300 hover:shadow-lg transition duration-200 flex flex-col justify-between">
+                <div>
+                    <div class="w-12 h-12 rounded-2xl bg-teal-100 text-teal-600 flex items-center justify-center mb-5">
+                        <i data-lucide="map-pin" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Peta Lahan &amp; Tren Harga</h3>
+                    <p class="text-xs text-slate-600 leading-relaxed">
+                        Visualisasi sebaran kebun mitra tani dengan peta geospasial interaktif serta grafik fluktuasi harga pasar harian untuk transparansi ekonomi.
+                    </p>
+                </div>
+                <div class="mt-6 pt-4 border-t border-slate-200/80 flex items-center gap-2 text-xs font-bold text-teal-700">
+                    <span>Geospatial &amp; Analytics</span>
+                    <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Komoditas Utama -->
-<section id="komoditas" class="py-20 bg-white">
+<section id="komoditas" class="py-20 bg-slate-50 border-t border-slate-200/80">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
             <div>

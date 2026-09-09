@@ -256,7 +256,7 @@
                         </div>
 
                         <div class="flex items-center gap-2 mt-4">
-                            <a href="{{ route('marketplace.show', $match['product']->id) }}" class="flex-1 text-center py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 text-xs transition">
+                            <a href="{{ route('marketplace.show', $match['product']->slug ?? $match['product']->id) }}" class="flex-1 text-center py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 text-xs transition">
                                 Detail
                             </a>
                             <a href="{{ route('matching.index', ['commodity_id' => $match['product']->commodity_id, 'max_price' => $match['product']->price]) }}" class="flex-1 text-center py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 font-bold text-white text-xs transition shadow-sm">

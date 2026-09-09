@@ -5,27 +5,27 @@
 
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">
-    <!-- Back & Actions Bar -->
-    <div class="flex items-center justify-between">
+    <!-- Back & Actions Bar (Hidden on Print) -->
+    <div class="no-print flex items-center justify-between">
         <a href="{{ Auth::user()->id === $order->seller_id ? route('farmer.orders.index') : route('orders.index') }}" 
-           class="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-slate-900 transition">
+           class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 shadow-sm transition">
             <i data-lucide="arrow-left" class="w-4 h-4"></i>
             <span>Kembali ke Daftar Pesanan</span>
         </a>
 
         <div class="flex items-center gap-2">
-            <button onclick="window.print()" class="px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-xs font-bold text-slate-700 transition flex items-center gap-1.5 shadow-sm">
+            <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
                 <i data-lucide="printer" class="w-3.5 h-3.5"></i>
-                <span>Cetak Invoice</span>
+                <span>Cetak Faktur / Invoice</span>
             </button>
         </div>
     </div>
 
-    <!-- Status Progression Banner -->
-    <div class="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-6">
+    <!-- Status Progression Banner & Timeline (Hidden on Print) -->
+    <div class="no-print p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm space-y-6">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
             <div>
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Status Transaksi</span>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Status Transaksi Berjalan</span>
                 <div class="flex items-center gap-3 mt-1">
                     <span class="text-xl font-black text-slate-900 font-mono">#{{ $order->order_number }}</span>
                     <span class="px-3 py-1 rounded-full text-xs font-bold border {{ $order->status_badge_color }}">
@@ -112,42 +112,49 @@
         </div>
     </div>
 
-    <!-- Digital Invoice Card -->
-    <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-10 space-y-8">
+    <!-- Official Printable Invoice Card -->
+    <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm p-6 sm:p-10 space-y-8 print:border-none print:shadow-none print:p-0">
         <!-- Invoice Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-slate-200 gap-4">
+        <div class="flex justify-between items-start pb-6 border-b border-slate-200 gap-4">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md">
+                <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-md print:shadow-none">
                     <i data-lucide="sprout" class="w-6 h-6"></i>
                 </div>
                 <div>
                     <h3 class="text-2xl font-black tracking-tight text-slate-900">SINTESA</h3>
-                    <p class="text-xs text-emerald-700 font-semibold uppercase">Faktur Transaksi Digital Niaga Pertanian</p>
+                    <p class="text-xs text-emerald-700 font-semibold uppercase">Faktur Transaksi Niaga Pertanian Cerdas</p>
                 </div>
             </div>
 
-            <div class="sm:text-right text-xs text-slate-500">
-                <p>Nomor Pesanan: <strong class="text-slate-900 font-mono">{{ $order->order_number }}</strong></p>
-                <p>Tanggal Pesan: <strong class="text-slate-900">{{ $order->created_at->translatedFormat('d F Y, H:i') }} WIB</strong></p>
-                <p>Status Pembayaran: <strong class="text-emerald-700">{{ $order->payment_status }}</strong></p>
+            <div class="text-right text-xs text-slate-600 space-y-1">
+                <div class="text-sm font-black text-slate-900 font-mono">INVOICE: #{{ $order->order_number }}</div>
+                <div>Tanggal: <strong>{{ $order->created_at->translatedFormat('d F Y') }}</strong></div>
+                <div>
+                    Status: 
+                    <span class="font-bold {{ $order->status === 'Selesai' ? 'text-emerald-700' : 'text-slate-800' }}">
+                        {{ $order->status }}
+                    </span>
+                    &bull; 
+                    <span class="font-bold text-emerald-700">{{ $order->payment_status }}</span>
+                </div>
             </div>
         </div>
 
-        <!-- Parties Involved -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 text-xs">
-            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
-                <span class="font-bold text-slate-400 uppercase tracking-wider block text-[10px]">Pihak Penjual (Petani)</span>
+        <!-- Parties Involved (Buyer & Seller) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 text-xs">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 print:bg-white print:border-slate-300">
+                <span class="font-bold text-slate-400 uppercase tracking-wider block text-[10px]">Pihak Penjual (Mitra Petani)</span>
                 <h4 class="text-sm font-bold text-slate-900">{{ $order->seller->name }}</h4>
                 <p class="text-slate-600">{{ $order->seller->farmerProfile->farm_name ?? 'Kebun Petani' }}</p>
-                <p class="text-slate-500">Telepon / WA: {{ $order->seller->phone ?? '-' }}</p>
-                <p class="text-slate-500">Lokasi: {{ $order->seller->farmerProfile->address ?? 'Jawa Timur' }}</p>
+                <p class="text-slate-500">Kontak: {{ $order->seller->phone ?? '-' }}</p>
+                <p class="text-slate-500">Lokasi Asal: {{ $order->seller->farmerProfile->address ?? ($order->seller->address ?? 'Jawa Timur') }}</p>
             </div>
 
-            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1.5 print:bg-white print:border-slate-300">
                 <span class="font-bold text-slate-400 uppercase tracking-wider block text-[10px]">Pihak Pembeli ({{ ucfirst($order->buyer->role) }})</span>
                 <h4 class="text-sm font-bold text-slate-900">{{ $order->buyer->name }}</h4>
-                <p class="text-slate-600">{{ $order->buyer->collectorProfile->business_name ?? ($order->buyer->consumerProfile->address ?? 'Konsumen') }}</p>
-                <p class="text-slate-500">Telepon / WA: {{ $order->buyer->phone ?? '-' }}</p>
+                <p class="text-slate-600">{{ $order->buyer->collectorProfile->company_name ?? ($order->buyer->consumerProfile->address ?? 'Pembeli Terdaftar') }}</p>
+                <p class="text-slate-500">Kontak: {{ $order->buyer->phone ?? '-' }}</p>
                 <p class="text-slate-500">Alamat Pengiriman: {{ $order->shipping_address }}</p>
             </div>
         </div>
@@ -156,7 +163,7 @@
         <div class="overflow-x-auto">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50/50">
+                    <tr class="border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50/50 print:bg-slate-100">
                         <th class="py-3 px-4">Komoditas / Produk</th>
                         <th class="py-3 px-4 text-center">Jumlah</th>
                         <th class="py-3 px-4 text-right">Harga Satuan</th>
@@ -169,7 +176,7 @@
                             <td class="py-4 px-4 font-bold text-slate-900">
                                 {{ $item->product_name }}
                                 @if($item->stock)
-                                    <span class="block text-[10px] text-slate-400 font-normal">Batch Stok: {{ $item->stock->batch_code }} (Mutu: {{ $item->stock->quality }})</span>
+                                    <span class="block text-[10px] text-slate-400 font-normal">Batch: {{ $item->stock->batch_code }} &bull; Mutu: {{ $item->stock->quality }}</span>
                                 @endif
                             </td>
                             <td class="py-4 px-4 text-center font-semibold text-slate-700">{{ $item->formatted_quantity }}</td>
@@ -183,6 +190,12 @@
                         <td colspan="3" class="py-2.5 px-4 text-right text-slate-500">Metode Pengiriman:</td>
                         <td class="py-2.5 px-4 text-right font-semibold text-slate-800">{{ $order->shipping_method }}</td>
                     </tr>
+                    @if($order->shipping_cost > 0)
+                    <tr class="text-xs">
+                        <td colspan="3" class="py-2.5 px-4 text-right text-slate-500">Biaya Pengiriman:</td>
+                        <td class="py-2.5 px-4 text-right font-semibold text-slate-800">Rp {{ number_format($order->shipping_cost, 0, ',', '.') }}</td>
+                    </tr>
+                    @endif
                     <tr class="text-xs">
                         <td colspan="3" class="py-2.5 px-4 text-right text-slate-500">Metode Pembayaran:</td>
                         <td class="py-2.5 px-4 text-right font-semibold text-slate-800">{{ $order->payment_method }}</td>
@@ -196,17 +209,28 @@
         </div>
 
         @if($order->notes)
-            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs">
-                <span class="font-bold text-slate-700 block mb-1">Catatan Pembeli:</span>
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs print:bg-white">
+                <span class="font-bold text-slate-700 block mb-1">Catatan Tambahan:</span>
                 <p class="text-slate-600 italic">"{{ $order->notes }}"</p>
             </div>
         @endif
+
+        <!-- Printable Footer Stamp -->
+        <div class="pt-6 border-t border-slate-200 flex justify-between items-end text-[11px] text-slate-500">
+            <div>
+                <p class="font-bold text-slate-800">SINTESA — Niaga Pertanian Cerdas</p>
+                <p class="text-slate-400 mt-0.5">Dokumen ini diterbitkan secara otomatis dan sah tanpa tanda tangan basah.</p>
+            </div>
+            <div class="text-right">
+                <p class="text-slate-400">Dicetak pada: {{ now()->translatedFormat('d F Y, H:i') }} WIB</p>
+            </div>
+        </div>
     </div>
 </div>
 
-<!-- Modal Batalkan Pesanan (Buyer) -->
+<!-- Modal Batalkan Pesanan (Buyer, Hidden on Print) -->
 @if(Auth::user()->id === $order->buyer_id && $order->canBeCancelledByBuyer())
-    <div id="cancel-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div id="cancel-modal" class="no-print fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
             <div class="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center">
                 <i data-lucide="alert-triangle" class="w-6 h-6"></i>

@@ -4,25 +4,29 @@
 
 @section('content')
 <div class="bg-slate-50 min-h-screen pb-16">
-    <!-- Breadcrumbs -->
+    <!-- Breadcrumbs & Back Button -->
     <div class="bg-white border-b border-slate-200/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <nav class="flex items-center gap-2 text-xs font-semibold text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between gap-4">
+            <nav class="flex items-center gap-2 text-xs font-semibold text-slate-500 overflow-x-auto py-1">
                 <a href="{{ route('home') }}" class="hover:text-emerald-600 transition">Beranda</a>
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0"></i>
                 <a href="{{ route('marketplace.index') }}" class="hover:text-emerald-600 transition">Marketplace</a>
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
-                <a href="{{ route('marketplace.index', ['commodity' => $product->commodity->slug ?? '']) }}" class="hover:text-emerald-600 transition">
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0"></i>
+                <a href="{{ route('marketplace.index', ['commodity' => $product->commodity->slug ?? '']) }}" class="hover:text-emerald-600 transition whitespace-nowrap">
                     {{ $product->commodity->name ?? 'Komoditas' }}
                 </a>
-                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                <i data-lucide="chevron-right" class="w-3.5 h-3.5 shrink-0"></i>
                 <span class="text-slate-900 truncate max-w-xs">{{ $product->name }}</span>
             </nav>
+            <a href="{{ route('marketplace.index') }}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition shrink-0 shadow-xs">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Kembali ke Marketplace</span>
+            </a>
         </div>
     </div>
 
     <!-- Main Detail Section -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             <!-- Left Side: Image Gallery & Description (7 Cols) -->

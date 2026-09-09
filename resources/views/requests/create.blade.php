@@ -5,10 +5,16 @@
 @section('content')
 <div class="max-w-3xl mx-auto space-y-6">
     <!-- Breadcrumb & Back -->
-    <div class="flex items-center gap-2 text-xs text-slate-500">
-        <a href="{{ route('requests.index') }}" class="hover:text-slate-800 transition">Permintaan Komoditas</a>
-        <span>/</span>
-        <span class="text-slate-800 font-semibold">Buat Permintaan Baru</span>
+    <div class="flex items-center justify-between gap-4">
+        <div class="flex items-center gap-2 text-xs text-slate-500">
+            <a href="{{ route('requests.index') }}" class="hover:text-slate-800 transition">Permintaan Komoditas</a>
+            <span>/</span>
+            <span class="text-slate-800 font-semibold">Buat Permintaan Baru</span>
+        </div>
+        <a href="{{ route('requests.index') }}" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold transition shadow-xs">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Kembali ke Bursa Permintaan</span>
+        </a>
     </div>
 
     <!-- Card Form -->

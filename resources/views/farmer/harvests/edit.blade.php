@@ -14,8 +14,9 @@
             </div>
             <h1 class="text-2xl font-black text-slate-900 tracking-tight">Edit Catatan Panen</h1>
         </div>
-        <a href="{{ route('farmer.harvests.index') }}" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
-            Kembali
+        <a href="{{ route('farmer.harvests.index') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs shadow-xs transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Kembali ke Catatan Panen</span>
         </a>
     </div>
 

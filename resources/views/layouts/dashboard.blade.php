@@ -33,7 +33,26 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        @media print {
+            #sidebar, header, nav, #mobile-backdrop, .no-print, .print\:hidden, button, form {
+                display: none !important;
+            }
+            body {
+                background: #ffffff !important;
+                color: #000000 !important;
+            }
+            main {
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .print\:block {
+                display: block !important;
+            }
+        }
     </style>
+    @stack('styles')
 </head>
 <body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
     <!-- Mobile Sidebar Backdrop -->
@@ -125,14 +144,7 @@
                     </div>
                     <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
-                <!-- Farmer Pre-Orders (Phase 5) -->
-                <a href="{{ route('farmer.preorders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.preorders.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="calendar-clock" class="w-5 h-5"></i>
-                        <span>Kampanye Pre-Order</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
-                </a>
+
 
             @elseif(Auth::user()->role === 'pengepul')
                 <a href="{{ route('collector.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('collector.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -163,21 +175,7 @@
                     </div>
                     <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
-                <!-- Preorders (Phase 5) -->
-                <a href="{{ route('preorders.my') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('preorders.my') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="calendar-clock" class="w-5 h-5"></i>
-                        <span>Pre-Order Saya</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
-                </a>
-                <a href="{{ route('preorders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('preorders.index') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="calendar-search" class="w-5 h-5"></i>
-                        <span>Katalog Pre-Order</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
-                </a>
+
                 <a href="{{ route('marketplace.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('marketplace.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="shopping-bag" class="w-5 h-5"></i>
@@ -237,21 +235,7 @@
                     </div>
                     <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
-                <!-- Preorders (Phase 5) -->
-                <a href="{{ route('preorders.my') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('preorders.my') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="clock" class="w-5 h-5"></i>
-                        <span>Pre-Order Saya</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
-                </a>
-                <a href="{{ route('preorders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('preorders.index') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="calendar-search" class="w-5 h-5"></i>
-                        <span>Katalog Pre-Order</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
-                </a>
+
 
             @elseif(Auth::user()->role === 'admin')
                 <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.dashboard') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -311,6 +295,7 @@
 
             <!-- Phase 7: Maps & Price Analytics -->
             <div class="pt-4 px-3 pb-2 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Peta & Pasar (Phase 7)</div>
+            @if(Auth::user()->role !== 'petani')
             <a href="{{ route('maps.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('maps.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                 <div class="flex items-center gap-3">
                     <i data-lucide="map" class="w-5 h-5 text-emerald-400"></i>
@@ -318,6 +303,7 @@
                 </div>
                 <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Geospasial</span>
             </a>
+            @endif
             <a href="{{ route('prices.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('prices.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                 <div class="flex items-center gap-3">
                     <i data-lucide="line-chart" class="w-5 h-5 text-teal-400"></i>

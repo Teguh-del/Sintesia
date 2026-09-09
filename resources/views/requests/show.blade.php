@@ -6,10 +6,15 @@
 <div class="space-y-6">
     <!-- Breadcrumb & Top Bar -->
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div class="flex items-center gap-2 text-xs text-slate-500">
-            <a href="{{ route('requests.index') }}" class="hover:text-slate-800 transition">Permintaan Komoditas</a>
-            <span>/</span>
-            <span class="text-slate-800 font-semibold">Detail Permintaan #REQ-{{ $commodityRequest->id }}</span>
+        <div class="flex items-center gap-3">
+            <a href="{{ route('requests.index') }}" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-bold transition shadow-xs">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Kembali ke Bursa Permintaan</span>
+            </a>
+            <div class="hidden sm:flex items-center gap-2 text-xs text-slate-500">
+                <span>/</span>
+                <span class="text-slate-800 font-semibold">Detail Permintaan #REQ-{{ $commodityRequest->id }}</span>
+            </div>
         </div>
         @if(in_array($commodityRequest->status, ['Aktif', 'Mendapat Penawaran']))
             <form action="{{ route('requests.close', $commodityRequest) }}" method="POST">

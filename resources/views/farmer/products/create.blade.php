@@ -2,6 +2,13 @@
 
 @section('title', 'Tambah Produk Baru - Petani SINTESA')
 
+@push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+    #location-picker-map { min-height: 280px; z-index: 1; }
+</style>
+@endpush
+
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">
     <!-- Page Header -->
@@ -14,8 +21,9 @@
             </div>
             <h1 class="text-2xl font-black text-slate-900 tracking-tight">Tambah Produk Marketplace</h1>
         </div>
-        <a href="{{ route('farmer.products.index') }}" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition">
-            Kembali
+        <a href="{{ route('farmer.products.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs shadow-xs transition">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Kembali ke Produk Saya</span>
         </a>
     </div>
 
@@ -214,23 +222,44 @@
                     @enderror
                 </div>
 
-                <!-- Coordinates -->
-                <div>
-                    <label for="latitude" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                        Latitude (Opsional - Koordinat Peta)
-                    </label>
-                    <input type="text" id="latitude" name="latitude" value="{{ old('latitude', $farmerProfile->latitude ?? '') }}" 
-                           placeholder="-7.8712" 
-                           class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
-                </div>
+                <!-- Leaflet Location Picker -->
+                <div class="md:col-span-2 space-y-3">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">
+                                Titik Lokasi Kebun pada Peta
+                            </label>
+                            <p class="text-xs text-slate-500 mt-0.5">
+                                Klik langsung pada peta untuk memindahkan pin lokasi kebun Anda, atau gunakan deteksi GPS otomatis.
+                            </p>
+                        </div>
+                        <button type="button" onclick="detectGPSLocation()" 
+                                class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold transition shadow-xs">
+                            <i data-lucide="crosshair" class="w-4 h-4 text-emerald-600"></i>
+                            <span>📍 Deteksi Lokasi Saya (GPS)</span>
+                        </button>
+                    </div>
 
-                <div>
-                    <label for="longitude" class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">
-                        Longitude (Opsional - Koordinat Peta)
-                    </label>
-                    <input type="text" id="longitude" name="longitude" value="{{ old('longitude', $farmerProfile->longitude ?? '') }}" 
-                           placeholder="112.5273" 
-                           class="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:ring-2 focus:ring-emerald-500 focus:bg-white focus:outline-none transition">
+                    <!-- Interactive Map Container -->
+                    <div id="location-picker-map" class="w-full h-72 rounded-2xl border border-slate-200 shadow-inner relative z-10"></div>
+
+                    <!-- Coordinates Display Card -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs gap-2">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-slate-600">Koordinat Lahan Terpilih:</span>
+                            <span id="coord-display" class="font-mono font-bold text-slate-900">
+                                {{ old('latitude', $farmerProfile->latitude ?? '-7.8712') }}, {{ old('longitude', $farmerProfile->longitude ?? '112.5273') }}
+                            </span>
+                        </div>
+                        <span class="text-[11px] text-emerald-700 font-semibold bg-emerald-100/80 px-2.5 py-0.5 rounded-lg">
+                            ✓ Otomatis terhubung ke SINTESA Match
+                        </span>
+                    </div>
+
+                    <!-- Auto-populated hidden coordinates -->
+                    <input type="hidden" id="latitude" name="latitude" value="{{ old('latitude', $farmerProfile->latitude ?? '-7.8712') }}">
+                    <input type="hidden" id="longitude" name="longitude" value="{{ old('longitude', $farmerProfile->longitude ?? '112.5273') }}">
                 </div>
 
                 <!-- Description -->
@@ -287,15 +316,20 @@
     </form>
 </div>
 
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
     // Automatic unit synchronization from chosen commodity
-    document.getElementById('commodity_id').addEventListener('change', function() {
-        const selected = this.options[this.selectedIndex];
-        const defaultUnit = selected.getAttribute('data-unit');
-        if (defaultUnit) {
-            document.getElementById('unit').value = defaultUnit;
-        }
-    });
+    const commoditySelect = document.getElementById('commodity_id');
+    if (commoditySelect) {
+        commoditySelect.addEventListener('change', function() {
+            const selected = this.options[this.selectedIndex];
+            const defaultUnit = selected.getAttribute('data-unit');
+            if (defaultUnit) {
+                document.getElementById('unit').value = defaultUnit;
+            }
+        });
+    }
 
     function previewImages(event) {
         const strip = document.getElementById('image-preview-strip');
@@ -323,5 +357,130 @@
             strip.classList.add('hidden');
         }
     }
+
+    // Leaflet Interactive Map Picker for Farmer
+    let map, marker;
+    document.addEventListener('DOMContentLoaded', function() {
+        const latInput = document.getElementById('latitude');
+        const lngInput = document.getElementById('longitude');
+        const coordDisplay = document.getElementById('coord-display');
+
+        let initialLat = parseFloat(latInput.value) || -7.8712;
+        let initialLng = parseFloat(lngInput.value) || 112.5273;
+
+        // Initialize Map
+        map = L.map('location-picker-map', {
+            center: [initialLat, initialLng],
+            zoom: 13,
+            scrollWheelZoom: false
+        });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        // Custom Leaflet marker icon
+        const farmIcon = L.divIcon({
+            className: 'custom-farm-marker',
+            html: `
+                <div style="background-color: #059669; width: 34px; height: 34px; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); display: flex; align-items: center; justify-content: center; border: 3px solid #ffffff; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);">
+                    <div style="transform: rotate(45deg); color: #ffffff; font-size: 14px; font-weight: bold;">🌱</div>
+                </div>
+            `,
+            iconSize: [34, 34],
+            iconAnchor: [17, 34],
+            popupAnchor: [0, -34]
+        });
+
+        marker = L.marker([initialLat, initialLng], {
+            draggable: true,
+            icon: farmIcon
+        }).addTo(map);
+
+        marker.bindPopup('<b>Lokasi Kebun Anda</b><br><span style="font-size:11px;color:#64748b;">Geser pin atau klik peta untuk ubah titik.</span>').openPopup();
+
+        function updatePosition(lat, lng) {
+            const fixedLat = parseFloat(lat).toFixed(6);
+            const fixedLng = parseFloat(lng).toFixed(6);
+            latInput.value = fixedLat;
+            lngInput.value = fixedLng;
+            if (coordDisplay) {
+                coordDisplay.textContent = `${fixedLat}, ${fixedLng}`;
+            }
+        }
+
+        // Marker drag handler
+        marker.on('dragend', function(e) {
+            const pos = e.target.getLatLng();
+            updatePosition(pos.lat, pos.lng);
+        });
+
+        // Map click handler
+        map.on('click', function(e) {
+            marker.setLatLng(e.latlng);
+            updatePosition(e.latlng.lat, e.latlng.lng);
+        });
+
+        // Ensure tiles load correctly on container render
+        setTimeout(function() {
+            map.invalidateSize();
+        }, 300);
+    });
+
+    // Detect GPS location with browser Geolocation API
+    window.detectGPSLocation = function() {
+        if (!navigator.geolocation) {
+            alert('Browser Anda tidak mendukung deteksi lokasi GPS.');
+            return;
+        }
+
+        const coordDisplay = document.getElementById('coord-display');
+        if (coordDisplay) {
+            coordDisplay.textContent = 'Mencari sinyal GPS...';
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+
+                if (map && marker) {
+                    map.setView([lat, lng], 15);
+                    marker.setLatLng([lat, lng]);
+                    marker.bindPopup('<b>Lokasi GPS Anda Ditemukan!</b>').openPopup();
+                }
+
+                document.getElementById('latitude').value = parseFloat(lat).toFixed(6);
+                document.getElementById('longitude').value = parseFloat(lng).toFixed(6);
+                if (coordDisplay) {
+                    coordDisplay.textContent = `${parseFloat(lat).toFixed(6)}, ${parseFloat(lng).toFixed(6)}`;
+                }
+
+                // Reverse geocode to fill location address if empty
+                const locationInput = document.getElementById('location');
+                if (locationInput && !locationInput.value.trim()) {
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data && data.display_name) {
+                                locationInput.value = data.display_name;
+                            }
+                        })
+                        .catch(() => {});
+                }
+            },
+            function(error) {
+                alert('Gagal mendeteksi lokasi GPS: ' + error.message);
+                const lat = document.getElementById('latitude').value;
+                const lng = document.getElementById('longitude').value;
+                if (coordDisplay) {
+                    coordDisplay.textContent = `${lat}, ${lng}`;
+                }
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+        );
+    };
 </script>
+@endpush
 @endsection

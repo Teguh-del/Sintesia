@@ -193,12 +193,12 @@
 
         <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex items-center gap-4">
             <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
-                <i data-lucide="clock" class="w-6 h-6"></i>
+                <i data-lucide="clipboard-list" class="w-6 h-6"></i>
             </div>
             <div>
-                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Fitur Pre-Order</p>
-                <h4 class="text-base font-bold text-slate-900">Jaminan Panen Segar</h4>
-                <p class="text-xs text-slate-400">Pesan Sebelum Panen</p>
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Bursa Permintaan</p>
+                <h4 class="text-base font-bold text-slate-900">Buka Kuota Pasokan</h4>
+                <a href="{{ route('requests.index') }}" class="text-xs text-amber-600 font-medium hover:underline">Kelola Permintaan &rarr;</a>
             </div>
         </div>
     </div>
@@ -256,7 +256,7 @@
                         </div>
 
                         <div class="flex items-center gap-2 mt-4">
-                            <a href="{{ route('marketplace.show', $match['product']->id) }}" class="flex-1 text-center py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 text-xs transition">
+                            <a href="{{ route('marketplace.show', $match['product']->slug ?? $match['product']->id) }}" class="flex-1 text-center py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 text-xs transition">
                                 Detail
                             </a>
                             <a href="{{ route('matching.index', ['commodity_id' => $match['product']->commodity_id, 'max_price' => $match['product']->price]) }}" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 font-bold text-white text-xs transition shadow-sm">

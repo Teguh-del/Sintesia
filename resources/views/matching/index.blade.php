@@ -7,15 +7,21 @@
     <!-- Header Banner -->
     <div class="bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-lg relative overflow-hidden">
         <div class="absolute -right-10 -bottom-10 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
-        <div class="max-w-3xl space-y-3 relative z-10">
-            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
-                <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
-                <span>Fitur Utama — Inovasi Algoritma Weighted Scoring</span>
+        <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 relative z-10">
+            <div class="max-w-3xl space-y-3">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
+                    <span>Fitur Utama — Inovasi Algoritma Weighted Scoring</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">SINTESA Match</h1>
+                <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                    Algoritma pencocokan cerdas yang mengevaluasi basis data petani, stok riil, daya saing harga, dan jarak geolokasi untuk menemukan produsen pertanian yang paling optimal untuk kebutuhan bisnis Anda.
+                </p>
             </div>
-            <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">SINTESA Match</h1>
-            <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Algoritma pencocokan cerdas yang mengevaluasi basis data petani, stok riil, daya saing harga, dan jarak geolokasi untuk menemukan produsen pertanian yang paling optimal untuk kebutuhan bisnis Anda.
-            </p>
+            <a href="{{ route('dashboard') }}" class="self-start inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-bold transition backdrop-blur-md shrink-0">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                <span>Kembali ke Dashboard</span>
+            </a>
         </div>
     </div>
 

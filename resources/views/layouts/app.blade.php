@@ -37,6 +37,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
+        html { scroll-behavior: smooth; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
     </style>
 </head>
@@ -61,10 +62,6 @@
                     <a href="{{ route('marketplace.index') }}" class="{{ request()->routeIs('marketplace.*') ? 'text-emerald-600 font-bold' : 'hover:text-emerald-600' }} transition flex items-center gap-1.5">
                         <i data-lucide="shopping-bag" class="w-4 h-4"></i>
                         <span>Marketplace</span>
-                    </a>
-                    <a href="{{ route('preorders.index') }}" class="{{ request()->routeIs('preorders.*') ? 'text-emerald-600 font-bold' : 'hover:text-emerald-600' }} transition flex items-center gap-1.5">
-                        <i data-lucide="calendar-clock" class="w-4 h-4"></i>
-                        <span>Pre-Order</span>
                     </a>
                     <a href="{{ route('home') }}#tentang" class="hover:text-emerald-600 transition">Tentang</a>
                     <a href="{{ route('home') }}#alur-kerja" class="hover:text-emerald-600 transition">Alur Niaga</a>

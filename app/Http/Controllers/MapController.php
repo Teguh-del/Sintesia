@@ -20,8 +20,12 @@ class MapController extends Controller
     /**
      * Display interactive Leaflet.js map of farmers and agricultural commodities.
      */
-    public function index(Request $request): View
+    public function index(Request $request)
     {
+        if (auth()->check() && auth()->user()->role === 'petani') {
+            return redirect()->route('farmer.dashboard')->with('error', 'Halaman peta sebaran petani hanya diperuntukkan bagi mitra Pengepul dan Konsumen.');
+        }
+
         $filters = [
             'commodity_id' => $request->query('commodity_id'),
             'location' => $request->query('location'),
