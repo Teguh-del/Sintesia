@@ -33,6 +33,45 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+        /* Custom Independent Scrollbar: Sidebar */
+        .custom-sidebar-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 9999px;
+        }
+        .custom-sidebar-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+
+        /* Custom Independent Scrollbar: Main Content */
+        .custom-content-scroll {
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+        .custom-content-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-content-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-content-scroll::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        .custom-content-scroll::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
         @media print {
             #sidebar, header, nav, #mobile-backdrop, .no-print, .print\:hidden, button, form {
                 display: none !important;
@@ -54,14 +93,14 @@
     </style>
     @stack('styles')
 </head>
-<body class="bg-slate-100 text-slate-800 antialiased min-h-screen flex flex-col md:flex-row">
+<body class="bg-slate-100 text-slate-800 antialiased h-screen overflow-hidden flex flex-col md:flex-row">
     <!-- Mobile Sidebar Backdrop -->
     <div id="mobile-backdrop" onclick="toggleSidebar()" class="fixed inset-0 z-40 bg-slate-900/60 backdrop-blur-sm hidden md:hidden"></div>
 
-    <!-- Sidebar -->
-    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:inset-auto md:min-h-screen">
+    <!-- Sidebar with independent scroll (slider) -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 h-full bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:h-screen md:shrink-0">
         <!-- Logo Area -->
-        <div class="h-20 flex items-center justify-between px-6 border-b border-slate-800">
+        <div class="h-20 shrink-0 flex items-center justify-between px-6 border-b border-slate-800">
             <a href="{{ route('home') }}" class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-md">
                     <i data-lucide="sprout" class="w-5 h-5"></i>
@@ -76,8 +115,8 @@
             </button>
         </div>
 
-        <!-- Navigation Menu per Role -->
-        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+        <!-- Navigation Menu per Role with Independent Scrollbar -->
+        <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto custom-sidebar-scroll">
             <div class="px-3 pb-2 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Navigasi Utama</div>
 
             @if(Auth::user()->role === 'petani')
@@ -90,21 +129,18 @@
                         <i data-lucide="wheat" class="w-5 h-5"></i>
                         <span>Hasil Panen</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
                 <a href="{{ route('farmer.stocks.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.stocks.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="boxes" class="w-5 h-5"></i>
                         <span>Manajemen Stok</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
                 <a href="{{ route('farmer.products.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.products.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
                         <i data-lucide="store" class="w-5 h-5"></i>
                         <span>Produk Marketplace</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
                 <!-- Farmer Orders (Phase 4) -->
                 <a href="{{ route('farmer.orders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.orders.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -117,8 +153,6 @@
                     @endphp
                     @if($pendingCount > 0)
                         <span class="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">{{ $pendingCount }}</span>
-                    @else
-                        <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                     @endif
                 </a>
                 <!-- Farmer Negotiations (Phase 5) -->
@@ -132,8 +166,6 @@
                     @endphp
                     @if($pendingNegoCount > 0)
                         <span class="text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full">{{ $pendingNegoCount }}</span>
-                    @else
-                        <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                     @endif
                 </a>
                 <!-- Farmer Commodity Requests (Phase 5) -->
@@ -142,7 +174,6 @@
                         <i data-lucide="clipboard-list" class="w-5 h-5"></i>
                         <span>Bursa Permintaan</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
 
 
@@ -157,7 +188,6 @@
                         <i data-lucide="receipt" class="w-5 h-5"></i>
                         <span>Pesanan Saya</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
                 <!-- Negotiations (Phase 5) -->
                 <a href="{{ route('negotiations.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('negotiations.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -165,7 +195,6 @@
                         <i data-lucide="handshake" class="w-5 h-5"></i>
                         <span>Negosiasi Harga</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
                 <!-- Commodity Requests (Phase 5) -->
                 <a href="{{ route('requests.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('requests.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -173,22 +202,15 @@
                         <i data-lucide="clipboard-list" class="w-5 h-5"></i>
                         <span>Permintaan Pasokan</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
 
-                <a href="{{ route('marketplace.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('marketplace.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
-                        <span>Katalog Marketplace</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
+                <a href="{{ route('marketplace.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('marketplace.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span>Katalog Marketplace</span>
                 </a>
-                <a href="{{ route('matching.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('matching.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
-                        <span>SINTESA Match</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md">Smart Match</span>
+                <a href="{{ route('matching.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('matching.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-emerald-400"></i>
+                    <span>SINTESA Match</span>
                 </a>
 
             @elseif(Auth::user()->role === 'konsumen')
@@ -196,20 +218,14 @@
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Dashboard Konsumen</span>
                 </a>
-                <a href="{{ route('marketplace.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('marketplace.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="shopping-cart" class="w-5 h-5"></i>
-                        <span>Belanja Komoditas</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Eksplor</span>
+                <a href="{{ route('marketplace.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('marketplace.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    <span>Belanja Komoditas</span>
                 </a>
                 <!-- SINTESA Match for Konsumen (Phase 6) -->
-                <a href="{{ route('matching.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('matching.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="sparkles" class="w-5 h-5 text-amber-400"></i>
-                        <span>SINTESA Match</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 px-2 py-0.5 rounded-md">Smart Match</span>
+                <a href="{{ route('matching.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('matching.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-emerald-400"></i>
+                    <span>SINTESA Match</span>
                 </a>
                 <!-- Konsumen Orders (Phase 4) -->
                 <a href="{{ route('orders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('orders.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -217,7 +233,6 @@
                         <i data-lucide="receipt" class="w-5 h-5"></i>
                         <span>Pesanan Saya</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
                 <!-- Negotiations (Phase 5) -->
                 <a href="{{ route('negotiations.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('negotiations.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -225,7 +240,6 @@
                         <i data-lucide="handshake" class="w-5 h-5"></i>
                         <span>Negosiasi Harga</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
                 <!-- Commodity Requests (Phase 5) -->
                 <a href="{{ route('requests.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('requests.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -233,49 +247,33 @@
                         <i data-lucide="clipboard-list" class="w-5 h-5"></i>
                         <span>Permintaan Komoditas</span>
                     </div>
-                    <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Aktif</span>
                 </a>
 
 
             @elseif(Auth::user()->role === 'admin')
-                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.dashboard') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
                     <span>Overview Sistem</span>
                 </a>
-                <a href="{{ route('admin.users.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.users.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="users" class="w-5 h-5 text-purple-400"></i>
-                        <span>Kelola Pengguna</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
+                <a href="{{ route('admin.users.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.users.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <i data-lucide="users" class="w-5 h-5 text-emerald-400"></i>
+                    <span>Kelola Pengguna</span>
                 </a>
-                <a href="{{ route('admin.commodities.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.commodities.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="sprout" class="w-5 h-5 text-emerald-400"></i>
-                        <span>Master Komoditas</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
+                <a href="{{ route('admin.commodities.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.commodities.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <i data-lucide="sprout" class="w-5 h-5 text-emerald-400"></i>
+                    <span>Master Komoditas</span>
                 </a>
-                <a href="{{ route('admin.products.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.products.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="shopping-bag" class="w-5 h-5 text-amber-400"></i>
-                        <span>Moderasi Produk</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
+                <a href="{{ route('admin.products.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.products.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <i data-lucide="shopping-bag" class="w-5 h-5 text-emerald-400"></i>
+                    <span>Moderasi Produk</span>
                 </a>
-                <a href="{{ route('admin.transactions.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.transactions.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="receipt" class="w-5 h-5 text-blue-400"></i>
-                        <span>Monitor Transaksi</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
+                <a href="{{ route('admin.transactions.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.transactions.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <i data-lucide="receipt" class="w-5 h-5 text-emerald-400"></i>
+                    <span>Monitor Transaksi</span>
                 </a>
-                <a href="{{ route('admin.prices.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.prices.*') ? 'bg-purple-600 text-white shadow-md shadow-purple-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                    <div class="flex items-center gap-3">
-                        <i data-lucide="tag" class="w-5 h-5 text-purple-400"></i>
-                        <span>Kelola Harga Pasar</span>
-                    </div>
-                    <span class="text-[10px] font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">Admin</span>
+                <a href="{{ route('admin.prices.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('admin.prices.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                    <i data-lucide="tag" class="w-5 h-5 text-emerald-400"></i>
+                    <span>Kelola Harga Pasar</span>
                 </a>
             @endif
 
@@ -293,15 +291,12 @@
                 @endif
             </a>
 
-            <!-- Phase 7: Maps & Price Analytics -->
-            <div class="pt-4 px-3 pb-2 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Peta & Pasar (Phase 7)</div>
+            <!-- Peta & Pasar -->
+            <div class="pt-4 px-3 pb-2 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Peta & Pasar</div>
             @if(Auth::user()->role !== 'petani')
-            <a href="{{ route('maps.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('maps.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
-                <div class="flex items-center gap-3">
-                    <i data-lucide="map" class="w-5 h-5 text-emerald-400"></i>
-                    <span>Peta Sebaran Petani</span>
-                </div>
-                <span class="text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 px-2 py-0.5 rounded-md">Geospasial</span>
+            <a href="{{ route('maps.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('maps.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
+                <i data-lucide="map" class="w-5 h-5 text-emerald-400"></i>
+                <span>Peta Sebaran Petani</span>
             </a>
             @endif
             <a href="{{ route('prices.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('prices.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -309,7 +304,6 @@
                     <i data-lucide="line-chart" class="w-5 h-5 text-teal-400"></i>
                     <span>Tren Harga Pasar</span>
                 </div>
-                <span class="text-[10px] font-bold bg-teal-500/20 text-teal-300 border border-teal-500/30 px-2 py-0.5 rounded-md">Chart</span>
             </a>
 
             <div class="pt-4 px-3 pb-2 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Ekosistem SINTESA</div>
@@ -319,8 +313,8 @@
             </a>
         </nav>
 
-        <!-- Sidebar User Card -->
-        <div class="p-4 border-t border-slate-800">
+        <!-- Sidebar User Card (Fixed Bottom of Sidebar) -->
+        <div class="p-4 border-t border-slate-800 shrink-0">
             <div class="p-3 bg-slate-800/60 rounded-xl flex items-center justify-between">
                 <div class="flex items-center gap-3 overflow-hidden">
                     <div class="w-9 h-9 rounded-lg bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center font-bold flex-shrink-0">
@@ -341,10 +335,10 @@
         </div>
     </aside>
 
-    <!-- Main Content Area -->
-    <div class="flex-1 flex flex-col min-w-0">
-        <!-- Top Navbar -->
-        <header class="h-20 bg-white border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
+    <!-- Main Content Area with Independent Scrollbar -->
+    <div class="flex-1 flex flex-col h-screen overflow-y-auto custom-content-scroll min-w-0">
+        <!-- Top Navbar (Sticky Top of Content) -->
+        <header class="h-20 shrink-0 bg-white border-b border-slate-200/80 px-4 sm:px-8 flex items-center justify-between sticky top-0 z-30">
             <div class="flex items-center gap-4">
                 <button onclick="toggleSidebar()" class="p-2 -ml-2 rounded-xl text-slate-600 hover:bg-slate-100 md:hidden">
                     <i data-lucide="menu" class="w-6 h-6"></i>
@@ -367,11 +361,7 @@
                     @endif
                 </a>
 
-                <div class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
-                    {{ Auth::user()->role === 'admin' ? 'bg-purple-100 text-purple-700' : '' }}
-                    {{ Auth::user()->role === 'petani' ? 'bg-emerald-100 text-emerald-700' : '' }}
-                    {{ Auth::user()->role === 'pengepul' ? 'bg-amber-100 text-amber-700' : '' }}
-                    {{ Auth::user()->role === 'konsumen' ? 'bg-blue-100 text-blue-700' : '' }}">
+                <div class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-50 text-emerald-800 border border-emerald-200/80">
                     Role: {{ ucfirst(Auth::user()->role) }}
                 </div>
 
@@ -405,7 +395,7 @@
         @endif
 
         <!-- Page Content -->
-        <main class="flex-1 p-4 sm:p-8">
+        <main class="flex-1 p-4 sm:p-8 pb-16">
             @yield('content')
         </main>
     </div>

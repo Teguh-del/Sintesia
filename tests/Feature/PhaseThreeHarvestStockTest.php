@@ -221,4 +221,66 @@ class PhaseThreeHarvestStockTest extends TestCase
         $stockResponse = $this->actingAs($collector)->get('/farmer/stocks');
         $this->assertTrue(in_array($stockResponse->status(), [302, 403]));
     }
+
+    /**
+     * Test farmer stocks create alias redirects to harvest creation form.
+     */
+    public function test_farmer_stocks_create_redirects_to_harvest_create(): void
+    {
+        $farmer = User::where('role', 'petani')->first();
+        $this->assertNotNull($farmer);
+
+        $response = $this->actingAs($farmer)->get('/farmer/stocks/create');
+        $response->assertRedirect('/farmer/harvests/create');
+
+        $followed = $this->actingAs($farmer)->get('/farmer/harvests/create');
+        $followed->assertStatus(200);
+        $followed->assertSee('Catat Hasil Panen');
+        $followed->assertSee('Tambah Stok Riil');
+        $followed->assertSee('harvest-map-picker');
+        // Farmer must NOT be asked for raw lat/long fields
+        $followed->assertDontSee('type="number" id="latitude"', false);
+        $followed->assertDontSee('type="text" id="latitude"', false);
+        $followed->assertSee('type="hidden" id="latitude"', false);
+        $followed->assertSee('type="hidden" id="longitude"', false);
+    }
+
+    /**
+     * Test recording harvest stores map coordinates and optionally updates farmer profile.
+     */
+    public function test_farmer_can_record_harvest_with_map_coordinates_and_profile_sync(): void
+    {
+        $farmer = User::where('role', 'petani')->first();
+        $commodity = Commodity::where('slug', 'cabai')->first() ?? Commodity::first();
+        $this->assertNotNull($farmer);
+        $this->assertNotNull($commodity);
+
+        $harvestData = [
+            'commodity_id' => $commodity->id,
+            'quantity' => 250,
+            'unit' => 'kg',
+            'harvest_date' => now()->format('Y-m-d'),
+            'quality' => 'Grade A (Super)',
+            'location' => 'Desa Tulungrejo, Kec. Bumiaji, Kota Batu',
+            'latitude' => -7.8234567,
+            'longitude' => 112.5123456,
+            'update_profile_location' => 1,
+            'notes' => 'Pengujian koordinat peta tanpa input desimal manual petani.',
+        ];
+
+        $response = $this->actingAs($farmer)->post('/farmer/harvests', $harvestData);
+        $response->assertRedirect('/farmer/harvests');
+
+        $this->assertDatabaseHas('harvests', [
+            'user_id' => $farmer->id,
+            'commodity_id' => $commodity->id,
+            'location' => 'Desa Tulungrejo, Kec. Bumiaji, Kota Batu',
+            'latitude' => -7.8234567,
+            'longitude' => 112.5123456,
+        ]);
+
+        $farmer->farmerProfile->refresh();
+        $this->assertEquals(-7.8234567, (float) $farmer->farmerProfile->latitude);
+        $this->assertEquals(112.5123456, (float) $farmer->farmerProfile->longitude);
+    }
 }

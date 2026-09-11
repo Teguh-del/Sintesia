@@ -12,6 +12,10 @@ class ConsumerProfile extends Model
 
     protected $fillable = [
         'user_id',
+        'province',
+        'city',
+        'district',
+        'village',
         'address',
         'latitude',
         'longitude',

@@ -243,23 +243,23 @@
                     <!-- Interactive Map Container -->
                     <div id="location-picker-map" class="w-full h-72 rounded-2xl border border-slate-200 shadow-inner relative z-10"></div>
 
-                    <!-- Coordinates Display Card -->
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs gap-2">
+                    <!-- Friendly Status Card (Tanpa Angka Desimal Koordinat) -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3.5 rounded-xl bg-emerald-50/70 border border-emerald-200/80 text-xs gap-2">
                         <div class="flex items-center gap-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                            <span class="text-slate-600">Koordinat Lahan Terpilih:</span>
-                            <span id="coord-display" class="font-mono font-bold text-slate-900">
-                                {{ old('latitude', $farmerProfile->latitude ?? '-7.8712') }}, {{ old('longitude', $farmerProfile->longitude ?? '112.5273') }}
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse flex-shrink-0"></span>
+                            <span class="font-bold text-emerald-950">Titik Kebun Ditandai:</span>
+                            <span id="coord-display" class="text-emerald-800 font-medium">
+                                {{ $selectedStock->harvest->location ?? $farmerProfile->address ?? 'Pin lokasi lahan terpasang di peta' }}
                             </span>
                         </div>
-                        <span class="text-[11px] text-emerald-700 font-semibold bg-emerald-100/80 px-2.5 py-0.5 rounded-lg">
+                        <span class="text-[11px] text-emerald-700 font-semibold bg-white/80 border border-emerald-200 px-2.5 py-0.5 rounded-lg flex-shrink-0">
                             ✓ Otomatis terhubung ke SINTESA Match
                         </span>
                     </div>
 
                     <!-- Auto-populated hidden coordinates -->
-                    <input type="hidden" id="latitude" name="latitude" value="{{ old('latitude', $farmerProfile->latitude ?? '-7.8712') }}">
-                    <input type="hidden" id="longitude" name="longitude" value="{{ old('longitude', $farmerProfile->longitude ?? '112.5273') }}">
+                    <input type="hidden" id="latitude" name="latitude" value="{{ old('latitude', $selectedStock->harvest->latitude ?? $farmerProfile->latitude ?? '-7.8712') }}">
+                    <input type="hidden" id="longitude" name="longitude" value="{{ old('longitude', $selectedStock->harvest->longitude ?? $farmerProfile->longitude ?? '112.5273') }}">
                 </div>
 
                 <!-- Description -->
@@ -406,8 +406,20 @@
             latInput.value = fixedLat;
             lngInput.value = fixedLng;
             if (coordDisplay) {
-                coordDisplay.textContent = `${fixedLat}, ${fixedLng}`;
+                coordDisplay.textContent = 'Memperbarui lokasi kebun...';
             }
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${fixedLat}&lon=${fixedLng}&zoom=16`)
+                .then(res => res.json())
+                .then(data => {
+                    if (coordDisplay) {
+                        coordDisplay.textContent = data && data.display_name ? 'Area: ' + data.display_name : 'Pin lokasi lahan terpasang di peta';
+                    }
+                })
+                .catch(() => {
+                    if (coordDisplay) {
+                        coordDisplay.textContent = 'Pin lokasi lahan terpasang di peta';
+                    }
+                });
         }
 
         // Marker drag handler
@@ -437,7 +449,7 @@
 
         const coordDisplay = document.getElementById('coord-display');
         if (coordDisplay) {
-            coordDisplay.textContent = 'Mencari sinyal GPS...';
+            coordDisplay.textContent = 'Mencari sinyal GPS perangkat...';
         }
 
         navigator.geolocation.getCurrentPosition(
@@ -454,28 +466,29 @@
                 document.getElementById('latitude').value = parseFloat(lat).toFixed(6);
                 document.getElementById('longitude').value = parseFloat(lng).toFixed(6);
                 if (coordDisplay) {
-                    coordDisplay.textContent = `${parseFloat(lat).toFixed(6)}, ${parseFloat(lng).toFixed(6)}`;
+                    coordDisplay.textContent = 'Lokasi GPS lahan berhasil ditemukan';
                 }
 
                 // Reverse geocode to fill location address if empty
                 const locationInput = document.getElementById('location');
-                if (locationInput && !locationInput.value.trim()) {
-                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
-                        .then(res => res.json())
-                        .then(data => {
-                            if (data && data.display_name) {
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data && data.display_name) {
+                            if (locationInput && !locationInput.value.trim()) {
                                 locationInput.value = data.display_name;
                             }
-                        })
-                        .catch(() => {});
-                }
+                            if (coordDisplay) {
+                                coordDisplay.textContent = 'Area: ' + data.display_name;
+                            }
+                        }
+                    })
+                    .catch(() => {});
             },
             function(error) {
                 alert('Gagal mendeteksi lokasi GPS: ' + error.message);
-                const lat = document.getElementById('latitude').value;
-                const lng = document.getElementById('longitude').value;
                 if (coordDisplay) {
-                    coordDisplay.textContent = `${lat}, ${lng}`;
+                    coordDisplay.textContent = 'Silakan geser pin pada peta untuk menentukan lokasi';
                 }
             },
             { enableHighAccuracy: true, timeout: 10000 }

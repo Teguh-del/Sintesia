@@ -21,6 +21,15 @@ class HarvestStockService
             $commodity = Commodity::findOrFail($data['commodity_id']);
 
             // 1. Create Harvest record
+            $latitude = isset($data['latitude']) && $data['latitude'] !== '' ? (float) $data['latitude'] : null;
+            $longitude = isset($data['longitude']) && $data['longitude'] !== '' ? (float) $data['longitude'] : null;
+
+            // Fallback to farmer profile coordinates if not provided
+            if (($latitude === null || $longitude === null) && $farmer->farmerProfile) {
+                $latitude = $latitude ?? $farmer->farmerProfile->latitude;
+                $longitude = $longitude ?? $farmer->farmerProfile->longitude;
+            }
+
             $harvest = Harvest::create([
                 'user_id' => $farmer->id,
                 'commodity_id' => $commodity->id,
@@ -29,8 +38,19 @@ class HarvestStockService
                 'harvest_date' => $data['harvest_date'],
                 'quality' => $data['quality'],
                 'location' => $data['location'],
+                'latitude' => $latitude,
+                'longitude' => $longitude,
                 'notes' => $data['notes'] ?? null,
             ]);
+
+            // If farmer profile location is empty or user requested update, sync to farmer profile
+            if ($farmer->farmerProfile && (!empty($data['update_profile_location']) || empty($farmer->farmerProfile->latitude))) {
+                $farmer->farmerProfile->update(array_filter([
+                    'address' => $data['location'],
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                ], fn($val) => !is_null($val)));
+            }
 
             // 2. Generate unique batch code
             $comCode = strtoupper(substr($commodity->slug, 0, 3));
@@ -97,6 +117,9 @@ class HarvestStockService
                 $stock->syncStatus();
             }
 
+            $latitude = isset($data['latitude']) && $data['latitude'] !== '' ? (float) $data['latitude'] : $harvest->latitude;
+            $longitude = isset($data['longitude']) && $data['longitude'] !== '' ? (float) $data['longitude'] : $harvest->longitude;
+
             $harvest->update([
                 'commodity_id' => $data['commodity_id'],
                 'quantity' => $newQty,
@@ -104,8 +127,18 @@ class HarvestStockService
                 'harvest_date' => $data['harvest_date'],
                 'quality' => $data['quality'],
                 'location' => $data['location'],
+                'latitude' => $latitude,
+                'longitude' => $longitude,
                 'notes' => $data['notes'] ?? null,
             ]);
+
+            if ($harvest->user && $harvest->user->farmerProfile && !empty($data['update_profile_location'])) {
+                $harvest->user->farmerProfile->update(array_filter([
+                    'address' => $data['location'],
+                    'latitude' => $latitude,
+                    'longitude' => $longitude,
+                ], fn($val) => !is_null($val)));
+            }
 
             return $harvest->fresh('stock');
         });

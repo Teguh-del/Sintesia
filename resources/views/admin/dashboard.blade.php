@@ -6,25 +6,22 @@
 @section('content')
 <div class="space-y-8">
     <!-- Admin Hero Card -->
-    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-purple-900 via-indigo-950 to-slate-900 text-white shadow-xl relative overflow-hidden">
-        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-950 via-teal-900 to-slate-900 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute -right-10 -bottom-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
         <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div class="max-w-2xl space-y-2">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/20 border border-purple-400/30 text-purple-300 text-xs font-bold">
-                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-purple-300"></i>
-                    <span>Sistem Otoritas SINTESA — Phase 8 Final Command Center</span>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-300"></i>
+                    <span>Sistem Otoritas SINTESA</span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">
                     Pusat Komando & Pengawasan Sistem
                 </h1>
-                <p class="text-purple-200 text-xs sm:text-sm leading-relaxed">
-                    Kelola seluruh ekosistem pengguna, integritas master komoditas, moderasi katalog produk, dan monitor transaksi digital secara menyeluruh dari basis data MySQL terpusat.
-                </p>
             </div>
 
             <!-- GMV Badge -->
             <div class="px-5 py-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 text-center min-w-[160px]">
-                <span class="text-[10px] text-purple-200 uppercase tracking-wider font-bold block mb-1">Total Nilai Transaksi (GMV)</span>
+                <span class="text-[10px] text-emerald-200 uppercase tracking-wider font-bold block mb-1">Total Nilai Transaksi (GMV)</span>
                 <span class="text-2xl sm:text-3xl font-black text-emerald-400">Rp {{ number_format($totalGmv, 0, ',', '.') }}</span>
                 <span class="text-[10px] text-slate-300 block mt-1">{{ $completedOrders }} Pesanan Selesai</span>
             </div>
@@ -37,9 +34,9 @@
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Pengguna</p>
                 <h4 class="text-2xl font-black text-slate-900 mt-1">{{ $totalUsers }}</h4>
-                <p class="text-[11px] text-purple-600 font-medium mt-1">Pengguna Terverifikasi</p>
+                <p class="text-[11px] text-emerald-600 font-medium mt-1">Pengguna Terverifikasi</p>
             </div>
-            <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center">
                 <i data-lucide="users" class="w-6 h-6"></i>
             </div>
         </div>
@@ -83,14 +80,14 @@
         <h3 class="text-base font-bold text-slate-900 mb-4">Modul Manajemen Sistem Administrator</h3>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <!-- 1. User Management -->
-            <a href="{{ route('admin.users.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-purple-300 hover:shadow-md transition flex items-start gap-4 group">
-                <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
+            <a href="{{ route('admin.users.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-emerald-300 hover:shadow-md transition flex items-start gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
                     <i data-lucide="user-cog" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-purple-700 transition">Kelola Pengguna</h4>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition">Kelola Pengguna</h4>
                     <p class="text-xs text-slate-500 mt-1">Filter role, penangguhan status akun, dan audit profil lengkap petani/pembeli.</p>
-                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-purple-700 mt-2">
+                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 mt-2">
                         <span>Buka Modul</span>
                         <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </span>
@@ -113,14 +110,14 @@
             </a>
 
             <!-- 3. Product Moderation -->
-            <a href="{{ route('admin.products.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-amber-300 hover:shadow-md transition flex items-start gap-4 group">
-                <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
+            <a href="{{ route('admin.products.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-emerald-300 hover:shadow-md transition flex items-start gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
                     <i data-lucide="shopping-bag" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-amber-700 transition">Moderasi Produk</h4>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-teal-700 transition">Moderasi Produk</h4>
                     <p class="text-xs text-slate-500 mt-1">Audit katalog produk pasar, aktivasi/penangguhan produk demi perlindungan pembeli.</p>
-                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 mt-2">
+                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-teal-700 mt-2">
                         <span>{{ $activeProducts }} Produk Aktif</span>
                         <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </span>
@@ -128,14 +125,14 @@
             </a>
 
             <!-- 4. Transaction Monitoring -->
-            <a href="{{ route('admin.transactions.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-blue-300 hover:shadow-md transition flex items-start gap-4 group">
-                <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
+            <a href="{{ route('admin.transactions.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-emerald-300 hover:shadow-md transition flex items-start gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
                     <i data-lucide="receipt" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-blue-700 transition">Monitor Transaksi</h4>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition">Monitor Transaksi</h4>
                     <p class="text-xs text-slate-500 mt-1">Audit status pesanan, pembayaran, serta rincian invoice transaksi resmi.</p>
-                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 mt-2">
+                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 mt-2">
                         <span>{{ $totalOrders }} Pesanan Tercatat</span>
                         <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </span>
@@ -143,14 +140,14 @@
             </a>
 
             <!-- 5. Commodity Price Management -->
-            <a href="{{ route('admin.prices.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-purple-300 hover:shadow-md transition flex items-start gap-4 group">
-                <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
+            <a href="{{ route('admin.prices.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-emerald-300 hover:shadow-md transition flex items-start gap-4 group">
+                <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
                     <i data-lucide="tag" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-purple-700 transition">Kelola Harga Pasar</h4>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-emerald-700 transition">Kelola Harga Pasar</h4>
                     <p class="text-xs text-slate-500 mt-1">Catat dan update data referensi harga pasar harian untuk visualisasi Chart.js.</p>
-                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-purple-700 mt-2">
+                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 mt-2">
                         <span>{{ $totalPriceRecords }} Catatan Harga</span>
                         <i data-lucide="arrow-right" class="w-3 h-3"></i>
                     </span>
@@ -158,12 +155,12 @@
             </a>
 
             <!-- 6. Geospatial Map Explorer -->
-            <a href="{{ route('maps.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-teal-300 hover:shadow-md transition flex items-start gap-4 group">
+            <a href="{{ route('maps.index') }}" class="p-6 rounded-2xl bg-white border border-slate-200/90 shadow-sm hover:border-emerald-300 hover:shadow-md transition flex items-start gap-4 group">
                 <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center flex-shrink-0 group-hover:scale-105 transition">
                     <i data-lucide="map" class="w-6 h-6"></i>
                 </div>
                 <div>
-                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-teal-700 transition">Peta Geospasial</h4>
+                    <h4 class="font-bold text-slate-900 text-sm group-hover:text-teal-700 transition">Peta Sebaran Petani</h4>
                     <p class="text-xs text-slate-500 mt-1">Visualisasi sebaran lahan dan komoditas pertanian via OpenStreetMap.</p>
                     <span class="inline-flex items-center gap-1 text-[11px] font-bold text-teal-700 mt-2">
                         <span>Buka Peta</span>
@@ -181,7 +178,7 @@
                 <h3 class="text-base font-bold text-slate-900">Aktivitas Transaksi Terkini</h3>
                 <p class="text-xs text-slate-500">Pemantauan 5 pesanan terbaru di platform</p>
             </div>
-            <a href="{{ route('admin.transactions.index') }}" class="text-xs font-bold text-purple-700 hover:text-purple-800 flex items-center gap-1">
+            <a href="{{ route('admin.transactions.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
                 <span>Lihat Semua Transaksi</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>
@@ -233,7 +230,7 @@
                             </td>
                             <td class="py-3 px-3 text-right">
                                 <a href="{{ route('admin.transactions.show', $order) }}" 
-                                   class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-purple-50 hover:text-purple-700 text-slate-700 font-bold text-xs transition">
+                                   class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 font-bold text-xs transition">
                                     <span>Detail Invoice</span>
                                     <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
                                 </a>

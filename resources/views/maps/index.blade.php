@@ -37,7 +37,7 @@
                 <div class="flex items-center justify-between gap-4">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
                         <i data-lucide="map" class="w-3.5 h-3.5 text-amber-400"></i>
-                        <span>Phase 7 — Geospasial Pertanian Cerdas</span>
+                        <span>Peta Pertanian Cerdas</span>
                     </div>
                     <a href="{{ route('dashboard') }}" class="inline-flex sm:hidden items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold border border-white/20 transition backdrop-blur-md">
                         <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
@@ -46,7 +46,7 @@
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Peta Sebaran Petani & Komoditas</h1>
                 <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                    Eksplorasi titik lahan pertanian, komoditas unggulan panen, dan ketersediaan stok riil langsung dari database mitra petani terdaftar.
+                    Pantau persebaran lahan kebun, jenis komoditas panen, dan ketersediaan stok riil langsung dari para petani terdaftar.
                 </p>
             </div>
 
@@ -93,10 +93,10 @@
             <!-- Location Filter -->
             <div>
                 <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5">
-                    Wilayah Sentra Produksi
+                    Provinsi Sentra Produksi
                 </label>
                 <select name="location" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs font-semibold text-slate-800 focus:ring-2 focus:ring-emerald-500 focus:outline-none">
-                    <option value="">Semua Wilayah</option>
+                    <option value="">Semua Provinsi</option>
                     @foreach($locations as $key => $label)
                         <option value="{{ $key }}" {{ (strtolower($filters['location'] ?? '') == strtolower($key)) ? 'selected' : '' }}>
                             {{ $label }}

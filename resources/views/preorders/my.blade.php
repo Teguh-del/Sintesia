@@ -53,7 +53,7 @@
                 <p class="text-xs text-slate-500 mt-1">Amankan kuota panen petani dari awal untuk menjamin kepastian pasokan pangan Anda.</p>
             </div>
             <a href="{{ route('preorders.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold transition">
-                <span>Eksplor Pre-Order</span>
+                <span>Lihat Daftar Pre-Order</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>
         </div>

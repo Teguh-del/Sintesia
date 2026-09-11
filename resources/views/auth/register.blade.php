@@ -36,9 +36,9 @@
                         </label>
 
                         <!-- Pengepul -->
-                        <label class="relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition text-center hover:bg-amber-50/50" id="role-label-pengepul">
+                        <label class="relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition text-center hover:bg-emerald-50/50" id="role-label-pengepul">
                             <input type="radio" name="role" value="pengepul" class="sr-only" onchange="updateRoleFields('pengepul')" {{ old('role') === 'pengepul' ? 'checked' : '' }}>
-                            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-2">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-2">
                                 <i data-lucide="truck" class="w-5 h-5"></i>
                             </div>
                             <span class="text-sm font-bold text-slate-900">Pengepul</span>
@@ -46,9 +46,9 @@
                         </label>
 
                         <!-- Konsumen -->
-                        <label class="relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition text-center hover:bg-blue-50/50" id="role-label-konsumen">
+                        <label class="relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 cursor-pointer transition text-center hover:bg-emerald-50/50" id="role-label-konsumen">
                             <input type="radio" name="role" value="konsumen" class="sr-only" onchange="updateRoleFields('konsumen')" {{ old('role') === 'konsumen' ? 'checked' : '' }}>
-                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-2">
+                            <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-2">
                                 <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                             </div>
                             <span class="text-sm font-bold text-slate-900">Konsumen</span>
@@ -130,33 +130,97 @@
                 </div>
 
                 <!-- Dynamic Collector Fields -->
-                <div id="collector-fields" class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-4 hidden">
+                <div id="collector-fields" class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-4 hidden">
                     <div class="flex items-center gap-2">
-                        <i data-lucide="info" class="w-4 h-4 text-amber-700"></i>
-                        <span class="text-xs font-bold text-amber-800 uppercase tracking-wider">Informasi Usaha (Pengepul)</span>
+                        <i data-lucide="info" class="w-4 h-4 text-emerald-700"></i>
+                        <span class="text-xs font-bold text-emerald-800 uppercase tracking-wider">Informasi Usaha (Pengepul)</span>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Usaha / Gudang</label>
                             <input type="text" name="business_name" value="{{ old('business_name') }}"
-                                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 placeholder="Contoh: UD Hasil Bumi">
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-700 mb-1">Tipe Bisnis</label>
                             <input type="text" name="business_type" value="{{ old('business_type') }}"
-                                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-amber-500"
+                                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
                                 placeholder="Contoh: Pengepul Grosir">
                         </div>
                     </div>
                 </div>
 
-                <!-- Address Field -->
-                <div>
-                    <label for="address" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Alamat Domisili / Lokasi Lahan</label>
-                    <textarea id="address" name="address" rows="2"
-                        class="block w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
-                        placeholder="Kecamatan, Kabupaten, Provinsi">{{ old('address') }}</textarea>
+                <!-- Separated Location Section (Provinsi, Kabupaten, Kecamatan, Desa) -->
+                <div class="space-y-4 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                    <div class="flex items-center justify-between border-b border-slate-200 pb-2.5">
+                        <div class="flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-emerald-600"></i>
+                            <label class="text-xs font-bold uppercase tracking-wider text-slate-800">Alamat Domisili / Lokasi Lahan</label>
+                        </div>
+                        <span class="text-[11px] text-emerald-700 font-medium bg-emerald-100/60 px-2 py-0.5 rounded-md">Isi Terpisah Manual</span>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                        <!-- Provinsi -->
+                        <div>
+                            <label for="province" class="block text-xs font-semibold text-slate-700 mb-1">
+                                Provinsi
+                            </label>
+                            <input type="text" id="province" name="province" value="{{ old('province') }}"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
+                                placeholder="Contoh: Jawa Timur">
+                        </div>
+
+                        <!-- Kabupaten / Kota -->
+                        <div>
+                            <label for="city" class="block text-xs font-semibold text-slate-700 mb-1">
+                                Kabupaten / Kota
+                            </label>
+                            <input type="text" id="city" name="city" value="{{ old('city') }}"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
+                                placeholder="Contoh: Kabupaten Kediri">
+                        </div>
+
+                        <!-- Kecamatan -->
+                        <div>
+                            <label for="district" class="block text-xs font-semibold text-slate-700 mb-1">
+                                Kecamatan
+                            </label>
+                            <input type="text" id="district" name="district" value="{{ old('district') }}"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
+                                placeholder="Contoh: Pare">
+                        </div>
+
+                        <!-- Desa / Kelurahan -->
+                        <div>
+                            <label for="village" class="block text-xs font-semibold text-slate-700 mb-1">
+                                Desa / Kelurahan
+                            </label>
+                            <input type="text" id="village" name="village" value="{{ old('village') }}"
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
+                                placeholder="Contoh: Tertek">
+                        </div>
+                    </div>
+
+                    <!-- Detail Alamat / Jalan / RT RW -->
+                    <div>
+                        <label for="detail_address" class="block text-xs font-semibold text-slate-700 mb-1">
+                            Detail Jalan / Dusun / RT & RW <span class="text-slate-400 font-normal">(Opsional)</span>
+                        </label>
+                        <input type="text" id="detail_address" name="detail_address" value="{{ old('detail_address') }}"
+                            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition"
+                            placeholder="Contoh: Dusun Krajan, RT 02 / RW 01">
+                    </div>
+
+                    <!-- Synchronized Full Address Field -->
+                    <input type="hidden" id="address" name="address" value="{{ old('address') }}">
+
+                    <!-- Ringkasan Alamat -->
+                    <div id="address-preview-container" class="hidden p-3 rounded-xl bg-emerald-50 border border-emerald-200/80 text-xs">
+                        <span class="font-bold text-emerald-800 block mb-0.5">Ringkasan Alamat:</span>
+                        <span id="address-preview-text" class="text-slate-700 font-medium"></span>
+                    </div>
                 </div>
 
                 <button type="submit" class="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-md shadow-emerald-600/20 hover:shadow-lg transition duration-200 flex items-center justify-center gap-2">
@@ -194,11 +258,11 @@ function updateRoleFields(role) {
         farmerFields.classList.remove('hidden');
         collectorFields.classList.add('hidden');
     } else if (role === 'pengepul') {
-        labels.pengepul.className = "relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-amber-600 bg-amber-50/50 cursor-pointer transition text-center shadow-sm";
+        labels.pengepul.className = "relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition text-center shadow-sm";
         farmerFields.classList.add('hidden');
         collectorFields.classList.remove('hidden');
     } else {
-        labels.konsumen.className = "relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-blue-600 bg-blue-50/50 cursor-pointer transition text-center shadow-sm";
+        labels.konsumen.className = "relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition text-center shadow-sm";
         farmerFields.classList.add('hidden');
         collectorFields.classList.add('hidden');
     }
@@ -208,6 +272,55 @@ function updateRoleFields(role) {
 document.addEventListener('DOMContentLoaded', () => {
     const selectedRole = document.querySelector('input[name="role"]:checked')?.value || 'petani';
     updateRoleFields(selectedRole);
+    initLocationSync();
 });
+
+// Automatic address sync for separated manual location inputs
+function initLocationSync() {
+    const prov = document.getElementById('province');
+    const city = document.getElementById('city');
+    const dist = document.getElementById('district');
+    const vill = document.getElementById('village');
+    const detail = document.getElementById('detail_address');
+    const fullAddress = document.getElementById('address');
+    const previewContainer = document.getElementById('address-preview-container');
+    const previewText = document.getElementById('address-preview-text');
+
+    function updateAddress() {
+        const p = prov?.value.trim() || '';
+        const c = city?.value.trim() || '';
+        const d = dist?.value.trim() || '';
+        const v = vill?.value.trim() || '';
+        const dt = detail?.value.trim() || '';
+
+        const parts = [];
+        if (dt) parts.push(dt);
+        if (v) parts.push(v.startsWith('Desa ') || v.startsWith('Kelurahan ') ? v : 'Desa ' + v);
+        if (d) parts.push(d.startsWith('Kec. ') ? d : 'Kec. ' + d);
+        if (c) parts.push(c);
+        if (p) parts.push(p);
+
+        const compiled = parts.join(', ');
+        if (fullAddress) {
+            fullAddress.value = compiled;
+        }
+
+        if (compiled) {
+            if (previewText) previewText.textContent = compiled;
+            if (previewContainer) previewContainer.classList.remove('hidden');
+        } else {
+            if (previewText) previewText.textContent = '';
+            if (previewContainer) previewContainer.classList.add('hidden');
+        }
+    }
+
+    [prov, city, dist, vill, detail].forEach(el => {
+        if (el) {
+            el.addEventListener('input', updateAddress);
+        }
+    });
+
+    updateAddress();
+}
 </script>
 @endsection

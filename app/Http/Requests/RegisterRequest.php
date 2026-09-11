@@ -20,6 +20,11 @@ class RegisterRequest extends FormRequest
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'role' => ['required', 'string', Rule::in(['petani', 'pengepul', 'konsumen'])],
             'phone' => ['nullable', 'string', 'max:20'],
+            'province' => ['nullable', 'string', 'max:100'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'district' => ['nullable', 'string', 'max:100'],
+            'village' => ['nullable', 'string', 'max:100'],
+            'detail_address' => ['nullable', 'string', 'max:255'],
             'address' => ['nullable', 'string', 'max:500'],
             // Conditional profile fields
             'farm_name' => ['nullable', 'string', 'max:255'],

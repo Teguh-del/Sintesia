@@ -20,12 +20,16 @@ class Harvest extends Model
         'harvest_date',
         'quality',
         'location',
+        'latitude',
+        'longitude',
         'notes',
     ];
 
     protected $casts = [
         'quantity' => 'decimal:2',
         'harvest_date' => 'date',
+        'latitude' => 'decimal:7',
+        'longitude' => 'decimal:7',
     ];
 
     /* -------------------------------------------------------------------------- */

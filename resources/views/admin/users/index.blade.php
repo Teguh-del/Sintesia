@@ -102,7 +102,7 @@
                                     <i data-lucide="shopping-bag" class="w-3 h-3 mr-1"></i> Konsumen
                                 </span>
                             @else
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
                                     <i data-lucide="shield-check" class="w-3 h-3 mr-1"></i> Admin
                                 </span>
                             @endif

@@ -111,6 +111,40 @@ class PhaseOneAuthTest extends TestCase
     }
 
     /**
+     * Test public registration with separated location fields (desa, kecamatan, kabupaten, provinsi).
+     */
+    public function test_public_registration_with_separated_location_fields(): void
+    {
+        $email = 'petani_detail_' . time() . '@sintesa.id';
+
+        $response = $this->post('/register', [
+            'name' => 'Petani Pare',
+            'email' => $email,
+            'password' => 'password123',
+            'password_confirmation' => 'password123',
+            'role' => 'petani',
+            'farm_name' => 'Kebun Pare Sejahtera',
+            'farm_area_hectares' => 2.0,
+            'primary_commodity' => 'Jagung',
+            'province' => 'Jawa Timur',
+            'city' => 'Kabupaten Kediri',
+            'district' => 'Pare',
+            'village' => 'Tertek',
+            'detail_address' => 'RT 01 / RW 02',
+        ]);
+
+        $response->assertRedirect('/farmer/dashboard');
+        $this->assertDatabaseHas('users', ['email' => $email, 'role' => 'petani']);
+        $this->assertDatabaseHas('farmer_profiles', [
+            'farm_name' => 'Kebun Pare Sejahtera',
+            'province' => 'Jawa Timur',
+            'city' => 'Kabupaten Kediri',
+            'district' => 'Pare',
+            'village' => 'Tertek',
+        ]);
+    }
+
+    /**
      * Test admin role cannot be injected via public registration.
      */
     public function test_admin_role_cannot_be_registered_publicly(): void

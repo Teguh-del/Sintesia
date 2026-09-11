@@ -146,6 +146,13 @@ class User extends Authenticatable
         return $this->hasMany(PreorderItem::class, 'buyer_id');
     }
 
+    public function getAddressAttribute(): ?string
+    {
+        return $this->farmerProfile?->address
+            ?? $this->collectorProfile?->address
+            ?? $this->consumerProfile?->address;
+    }
+
     /**
      * Get user dashboard route based on role.
      */

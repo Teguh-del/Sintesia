@@ -6,16 +6,16 @@
 @section('content')
 <div class="space-y-6">
     <!-- Welcome Banner -->
-    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-lg relative overflow-hidden">
+    <div class="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-emerald-700 to-teal-800 text-white shadow-lg relative overflow-hidden">
         <div class="relative z-10 max-w-2xl">
-            <span class="inline-block px-3 py-1 rounded-full bg-blue-600/60 border border-blue-500/40 text-xs font-semibold uppercase tracking-wider mb-3">
+            <span class="inline-block px-3 py-1 rounded-full bg-emerald-600/60 border border-emerald-500/40 text-xs font-semibold uppercase tracking-wider mb-3">
                 Konsumen & Pembeli Langsung
             </span>
             <h2 class="text-2xl sm:text-3xl font-black tracking-tight mb-2">
                 Selamat Datang, {{ $user->name }}!
             </h2>
-            <p class="text-blue-100 text-sm leading-relaxed">
-                Beli hasil pertanian segar bermutu tinggi langsung dari tangan petani lokal, ikuti program Pre-Order panen, atau ajukan penawaran harga terbaik.
+            <p class="text-emerald-100 text-sm leading-relaxed">
+                Temukan berbagai produk pertanian segar langsung dari kebun petani, ikuti pemesanan sebelum panen, atau ajukan tawaran harga terbaik.
             </p>
         </div>
         <div class="absolute right-6 -bottom-6 opacity-10 hidden sm:block">
@@ -28,12 +28,12 @@
         <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
             <div>
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pesanan Aktif</p>
-                <p class="text-2xl font-black text-blue-600 mt-1">{{ $activeOrdersCount }}</p>
-                <a href="{{ route('orders.index') }}" class="text-[11px] font-bold text-blue-600 hover:underline inline-block mt-1">
+                <p class="text-2xl font-black text-emerald-600 mt-1">{{ $activeOrdersCount }}</p>
+                <a href="{{ route('orders.index') }}" class="text-[11px] font-bold text-emerald-600 hover:underline inline-block mt-1">
                     Cek Status &rarr;
                 </a>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+            <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                 <i data-lucide="clock" class="w-5 h-5"></i>
             </div>
         </div>
@@ -59,7 +59,7 @@
                     Semua Transaksi &rarr;
                 </a>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
                 <i data-lucide="package" class="w-5 h-5"></i>
             </div>
         </div>
@@ -82,7 +82,7 @@
     <div class="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm">
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                     <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                 </div>
                 <div>
@@ -90,7 +90,7 @@
                     <p class="text-xs text-slate-500">Pantau proses penyiapan dan pengiriman komoditas dari petani</p>
                 </div>
             </div>
-            <a href="{{ route('orders.index') }}" class="text-xs font-bold text-blue-700 hover:text-blue-800 flex items-center gap-1">
+            <a href="{{ route('orders.index') }}" class="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1">
                 <span>Lihat Semua Pesanan</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
             </a>
@@ -144,7 +144,7 @@
                             </td>
                             <td class="py-3 px-3 text-right">
                                 <a href="{{ route('orders.show', $order) }}" 
-                                   class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 hover:text-blue-700 text-slate-700 font-bold text-xs transition">
+                                   class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-700 font-bold text-xs transition">
                                     <span>Detail & Invoice</span>
                                     <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
                                 </a>
@@ -159,7 +159,7 @@
                 <i data-lucide="shopping-basket" class="w-10 h-10 text-slate-300 mx-auto mb-2"></i>
                 <h4 class="text-sm font-bold text-slate-700">Belum Ada Belanjaan</h4>
                 <p class="text-xs text-slate-400 mt-1 max-w-sm mx-auto">Mulai belanja komoditas segar langsung dari petani dengan kualitas unggulan di marketplace.</p>
-                <a href="{{ route('marketplace.index') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow transition">
+                <a href="{{ route('marketplace.index') }}" class="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow transition">
                     <span>Mulai Belanja</span>
                     <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                 </a>
@@ -170,7 +170,7 @@
     <!-- Consumer Profile Summary -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center flex-shrink-0">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="map-pin" class="w-6 h-6"></i>
             </div>
             <div>
@@ -192,13 +192,13 @@
         </div>
 
         <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
+            <div class="w-12 h-12 rounded-xl bg-teal-100 text-teal-700 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="clipboard-list" class="w-6 h-6"></i>
             </div>
             <div>
                 <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Bursa Permintaan</p>
                 <h4 class="text-base font-bold text-slate-900">Buka Kuota Pasokan</h4>
-                <a href="{{ route('requests.index') }}" class="text-xs text-amber-600 font-medium hover:underline">Kelola Permintaan &rarr;</a>
+                <a href="{{ route('requests.index') }}" class="text-xs text-teal-600 font-medium hover:underline">Kelola Permintaan &rarr;</a>
             </div>
         </div>
     </div>
@@ -208,15 +208,15 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div>
                 <div class="flex items-center gap-2 mb-1">
-                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
-                    <i data-lucide="sparkles" class="w-5 h-5 text-amber-500"></i>
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <i data-lucide="sparkles" class="w-5 h-5 text-emerald-600"></i>
                     <h3 class="text-lg font-bold text-slate-900">Rekomendasi Cerdas SINTESA Match</h3>
                 </div>
                 <p class="text-xs text-slate-500">
-                    Hasil kalkulasi MySQL riil berdasarkan preferensi komoditas & alamat Anda (35% Komoditas, 25% Stok, 20% Harga, 20% Jarak):
+                    Pilihan produk terbaik yang disesuaikan dengan kebutuhan komoditas, ketersediaan stok petani, kecocokan harga, dan jarak terdekat dari lokasi Anda.
                 </p>
             </div>
-            <a href="{{ route('matching.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-sm transition">
+            <a href="{{ route('matching.index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-sm transition">
                 <i data-lucide="sliders-horizontal" class="w-4 h-4"></i>
                 <span>Buka Engine SINTESA Match Lengkap</span>
                 <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
@@ -226,7 +226,7 @@
         @if(isset($topMatches) && $topMatches->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
                 @foreach($topMatches as $match)
-                    <div class="p-5 rounded-2xl bg-gradient-to-b from-slate-50 to-white border border-slate-200/90 shadow-sm hover:border-blue-300 hover:shadow-md transition">
+                    <div class="p-5 rounded-2xl bg-gradient-to-b from-slate-50 to-white border border-slate-200/90 shadow-sm hover:border-emerald-300 hover:shadow-md transition">
                         <div class="flex items-start justify-between gap-2 mb-3">
                             <div>
                                 <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">{{ $match['farmer']['farm_name'] ?? 'Petani Terverifikasi' }}</span>
@@ -259,7 +259,7 @@
                             <a href="{{ route('marketplace.show', $match['product']->slug ?? $match['product']->id) }}" class="flex-1 text-center py-2 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 font-bold text-slate-700 text-xs transition">
                                 Detail
                             </a>
-                            <a href="{{ route('matching.index', ['commodity_id' => $match['product']->commodity_id, 'max_price' => $match['product']->price]) }}" class="flex-1 text-center py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 font-bold text-white text-xs transition shadow-sm">
+                            <a href="{{ route('matching.index', ['commodity_id' => $match['product']->commodity_id, 'max_price' => $match['product']->price]) }}" class="flex-1 text-center py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 font-bold text-white text-xs transition shadow-sm">
                                 Cocokkan
                             </a>
                         </div>
@@ -277,22 +277,22 @@
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                 <p class="text-xs text-slate-500 mb-1">1. Kesesuaian Komoditas</p>
                 <h4 class="text-xl font-black text-slate-900">35%</h4>
-                <p class="text-[11px] text-slate-400 mt-1">Mencocokkan jenis komoditas panen riil petani.</p>
+                <p class="text-[11px] text-slate-400 mt-1">Sesuai dengan jenis komoditas panen yang dicari.</p>
             </div>
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                 <p class="text-xs text-slate-500 mb-1">2. Ketersediaan Stok</p>
                 <h4 class="text-xl font-black text-slate-900">25%</h4>
-                <p class="text-[11px] text-slate-400 mt-1">Stok aktual yang siap dikirim tanpa kekurangan.</p>
+                <p class="text-[11px] text-slate-400 mt-1">Stok siap dikirim langsung dari kebun petani.</p>
             </div>
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                 <p class="text-xs text-slate-500 mb-1">3. Kesesuaian Harga</p>
                 <h4 class="text-xl font-black text-slate-900">20%</h4>
-                <p class="text-[11px] text-slate-400 mt-1">Evaluasi batas anggaran maksimal pembeli.</p>
+                <p class="text-[11px] text-slate-400 mt-1">Harga yang terjangkau dan sesuai anggaran Anda.</p>
             </div>
             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                 <p class="text-xs text-slate-500 mb-1">4. Kedekatan Jarak</p>
                 <h4 class="text-xl font-black text-slate-900">20%</h4>
-                <p class="text-[11px] text-slate-400 mt-1">Kalkulasi radius koordinat via Haversine formula.</p>
+                <p class="text-[11px] text-slate-400 mt-1">Perkiraan jarak tempuh ke lokasi pengiriman.</p>
             </div>
         </div>
     </div>
@@ -304,13 +304,13 @@
                 <h3 class="text-lg font-bold text-slate-900">Katalog Komoditas Pilihan</h3>
                 <p class="text-xs text-slate-500">Komoditas segar yang siap dipasarkan oleh mitra petani terdaftar:</p>
             </div>
-            <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1 rounded-lg">Phase 1 Data Foundation</span>
+            <span class="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200/60 px-3 py-1 rounded-lg">Katalog Unggulan</span>
         </div>
 
         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             @foreach($commodities as $c)
-            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center hover:bg-blue-50/50 transition">
-                <div class="w-12 h-12 mx-auto rounded-xl bg-white shadow-sm flex items-center justify-center text-blue-600 mb-2">
+            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 text-center hover:bg-emerald-50/50 hover:border-emerald-200 transition">
+                <div class="w-12 h-12 mx-auto rounded-xl bg-white shadow-sm flex items-center justify-center text-emerald-600 mb-2">
                     <i data-lucide="{{ $c->icon ?? 'sprout' }}" class="w-6 h-6"></i>
                 </div>
                 <h4 class="font-bold text-slate-900 text-sm">{{ $c->name }}</h4>

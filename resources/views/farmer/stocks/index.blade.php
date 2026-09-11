@@ -11,12 +11,12 @@
             <p class="text-sm text-slate-500 mt-0.5">Pantau ketersediaan pasokan komoditas per batch hasil panen secara akurat tanpa risiko stok negatif.</p>
         </div>
         <div class="flex items-center gap-3">
-            <a href="{{ route('farmer.harvests.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs shadow-sm transition">
-                <i data-lucide="plus" class="w-4 h-4 text-emerald-600"></i>
-                <span>Catat Panen Baru</span>
+            <a href="{{ route('farmer.stocks.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition">
+                <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                <span>Tambah Stok (Catat Panen)</span>
             </a>
-            <a href="{{ route('farmer.products.index') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md shadow-emerald-600/20 transition">
-                <i data-lucide="store" class="w-4 h-4"></i>
+            <a href="{{ route('farmer.products.index') }}" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs shadow-sm transition">
+                <i data-lucide="store" class="w-4 h-4 text-emerald-600"></i>
                 <span>Kelola Produk Marketplace</span>
             </a>
         </div>
@@ -240,9 +240,9 @@
                 <p class="text-xs text-slate-500 max-w-sm mx-auto mb-6">
                     Stok riil diterbitkan secara otomatis dari pencatatan hasil panen. Mulai catat hasil panen kebun Anda.
                 </p>
-                <a href="{{ route('farmer.harvests.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition">
+                <a href="{{ route('farmer.stocks.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs shadow-md transition">
                     <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                    <span>Catat Panen Sekarang</span>
+                    <span>Tambah Stok (Catat Panen) Sekarang</span>
                 </a>
             </div>
         @endif

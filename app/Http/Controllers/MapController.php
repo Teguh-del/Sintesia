@@ -35,15 +35,27 @@ class MapController extends Controller
         $markers = $this->mapService->getFarmerMarkers($filters);
         $summary = $this->mapService->getMapSummary($markers);
 
-        // Pre-package locations list
-        $locations = [
-            'Sleman' => 'Sleman, DI Yogyakarta',
-            'Bantul' => 'Bantul, DI Yogyakarta',
-            'Kulon Progo' => 'Kulon Progo, DI Yogyakarta',
-            'Kediri' => 'Kediri, Jawa Timur',
-            'Malang' => 'Malang & Batu, Jawa Timur',
-            'Magelang' => 'Magelang, Jawa Tengah',
-        ];
+        // Indonesian Provinces for Agricultural Production Centers (All 38 Provinces)
+        $locations = \App\Models\Province::orderBy('id')->pluck('name', 'name')->toArray();
+        if (empty($locations)) {
+            $locations = [
+                'Aceh' => 'Aceh', 'Sumatera Utara' => 'Sumatera Utara', 'Sumatera Barat' => 'Sumatera Barat',
+                'Riau' => 'Riau', 'Jambi' => 'Jambi', 'Sumatera Selatan' => 'Sumatera Selatan',
+                'Bengkulu' => 'Bengkulu', 'Lampung' => 'Lampung', 'Kepulauan Bangka Belitung' => 'Kepulauan Bangka Belitung',
+                'Kepulauan Riau' => 'Kepulauan Riau', 'DKI Jakarta' => 'DKI Jakarta', 'Jawa Barat' => 'Jawa Barat',
+                'Jawa Tengah' => 'Jawa Tengah', 'DI Yogyakarta' => 'DI Yogyakarta', 'Jawa Timur' => 'Jawa Timur',
+                'Banten' => 'Banten', 'Bali' => 'Bali', 'Nusa Tenggara Barat' => 'Nusa Tenggara Barat',
+                'Nusa Tenggara Timur' => 'Nusa Tenggara Timur', 'Kalimantan Barat' => 'Kalimantan Barat',
+                'Kalimantan Tengah' => 'Kalimantan Tengah', 'Kalimantan Selatan' => 'Kalimantan Selatan',
+                'Kalimantan Timur' => 'Kalimantan Timur', 'Kalimantan Utara' => 'Kalimantan Utara',
+                'Sulawesi Utara' => 'Sulawesi Utara', 'Sulawesi Tengah' => 'Sulawesi Tengah',
+                'Sulawesi Selatan' => 'Sulawesi Selatan', 'Sulawesi Tenggara' => 'Sulawesi Tenggara',
+                'Gorontalo' => 'Gorontalo', 'Sulawesi Barat' => 'Sulawesi Barat', 'Maluku' => 'Maluku',
+                'Maluku Utara' => 'Maluku Utara', 'Papua Barat' => 'Papua Barat', 'Papua Barat Daya' => 'Papua Barat Daya',
+                'Papua' => 'Papua', 'Papua Selatan' => 'Papua Selatan', 'Papua Pegunungan' => 'Papua Pegunungan',
+                'Papua Tengah' => 'Papua Tengah'
+            ];
+        }
 
         return view('maps.index', compact(
             'commodities',

@@ -101,7 +101,7 @@ class PhaseEightAdminPolishTest extends TestCase
     public function test_admin_can_view_and_manage_users(): void
     {
         $admin = User::where('role', 'admin')->first();
-        $farmer = User::where('role', 'petani')->first();
+        $farmer = User::where('role', 'petani')->latest()->first();
 
         $response = $this->actingAs($admin)->get('/admin/users');
         $response->assertStatus(200);
@@ -196,7 +196,7 @@ class PhaseEightAdminPolishTest extends TestCase
     public function test_admin_can_moderate_marketplace_products(): void
     {
         $admin = User::where('role', 'admin')->first();
-        $product = Product::first();
+        $product = Product::latest()->first();
         $this->assertNotNull($product, 'At least one product must exist in database.');
 
         // Index

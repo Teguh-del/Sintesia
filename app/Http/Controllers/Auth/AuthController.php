@@ -62,7 +62,9 @@ class AuthController extends Controller
             return redirect(Auth::user()->getDashboardRoute());
         }
 
-        return view('auth.register');
+        $provinces = \App\Models\Province::orderBy('id')->get();
+
+        return view('auth.register', compact('provinces'));
     }
 
     public function register(RegisterRequest $request): RedirectResponse
@@ -79,6 +81,25 @@ class AuthController extends Controller
                 'is_active' => true,
             ]);
 
+            $province = $validated['province'] ?? null;
+            $city = $validated['city'] ?? null;
+            $district = $validated['district'] ?? null;
+            $village = $validated['village'] ?? null;
+            $detail = $validated['detail_address'] ?? null;
+
+            $address = $validated['address'] ?? null;
+            if (empty($address) && ($province || $city || $district || $village)) {
+                $parts = array_filter([
+                    $detail,
+                    $village ? 'Desa ' . $village : null,
+                    $district ? 'Kec. ' . $district : null,
+                    $city,
+                    $province,
+                ]);
+                $address = implode(', ', $parts);
+            }
+            $finalAddress = $address ?: 'Kabupaten Kediri, Jawa Timur';
+
             // Create corresponding role profile
             if ($user->role === 'petani') {
                 FarmerProfile::create([
@@ -86,7 +107,11 @@ class AuthController extends Controller
                     'farm_name' => $validated['farm_name'] ?? ('Kebun ' . $user->name),
                     'farm_area_hectares' => $validated['farm_area_hectares'] ?? 1.0,
                     'primary_commodity' => $validated['primary_commodity'] ?? 'Jagung',
-                    'address' => $validated['address'] ?? 'Kabupaten Kediri, Jawa Timur',
+                    'province' => $province,
+                    'city' => $city,
+                    'district' => $district,
+                    'village' => $village,
+                    'address' => $finalAddress,
                     'latitude' => -7.8228400,
                     'longitude' => 112.0118640,
                 ]);
@@ -95,14 +120,22 @@ class AuthController extends Controller
                     'user_id' => $user->id,
                     'business_name' => $validated['business_name'] ?? ('Usaha Dagang ' . $user->name),
                     'business_type' => $validated['business_type'] ?? 'Pengepul Lokal',
-                    'address' => $validated['address'] ?? 'Kabupaten Kediri, Jawa Timur',
+                    'province' => $province,
+                    'city' => $city,
+                    'district' => $district,
+                    'village' => $village,
+                    'address' => $finalAddress,
                     'latitude' => -7.8184500,
                     'longitude' => 112.0156000,
                 ]);
             } elseif ($user->role === 'konsumen') {
                 ConsumerProfile::create([
                     'user_id' => $user->id,
-                    'address' => $validated['address'] ?? 'Kabupaten Kediri, Jawa Timur',
+                    'province' => $province,
+                    'city' => $city,
+                    'district' => $district,
+                    'village' => $village,
+                    'address' => $finalAddress,
                     'latitude' => -7.8200000,
                     'longitude' => 112.0100000,
                 ]);

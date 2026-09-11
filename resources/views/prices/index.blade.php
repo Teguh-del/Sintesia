@@ -14,7 +14,7 @@
             <div class="max-w-2xl space-y-2">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
                     <i data-lucide="line-chart" class="w-3.5 h-3.5 text-amber-400"></i>
-                    <span>Phase 7 — Analitik Pasar & Informasi Harga</span>
+                    <span>Analitik Pasar & Informasi Harga</span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">Tren Harga Komoditas Pertanian</h1>
                 <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">

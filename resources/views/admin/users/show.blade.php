@@ -62,7 +62,7 @@
                             <i data-lucide="shopping-bag" class="w-3.5 h-3.5 mr-1.5"></i> Konsumen
                         </span>
                     @else
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-purple-100 text-purple-800">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
                             <i data-lucide="shield-check" class="w-3.5 h-3.5 mr-1.5"></i> Admin
                         </span>
                     @endif
@@ -159,13 +159,13 @@
                         <div class="text-xs text-amber-600 font-medium mt-0.5">Catatan Panen</div>
                     </div>
                     @else
-                    <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-100">
-                        <div class="text-lg font-bold text-blue-800">{{ $user->buyerOrders->count() }}</div>
-                        <div class="text-xs text-blue-600 font-medium mt-0.5">Total Pesanan Dibuat</div>
+                    <div class="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
+                        <div class="text-lg font-bold text-emerald-800">{{ $user->buyerOrders->count() }}</div>
+                        <div class="text-xs text-emerald-600 font-medium mt-0.5">Total Pesanan Dibuat</div>
                     </div>
-                    <div class="p-3 bg-purple-50/60 rounded-xl border border-purple-100">
-                        <div class="text-lg font-bold text-purple-800">{{ $user->commodityRequests()->count() }}</div>
-                        <div class="text-xs text-purple-600 font-medium mt-0.5">Permintaan Komoditas</div>
+                    <div class="p-3 bg-teal-50/60 rounded-xl border border-teal-100">
+                        <div class="text-lg font-bold text-teal-800">{{ $user->commodityRequests()->count() }}</div>
+                        <div class="text-xs text-teal-600 font-medium mt-0.5">Permintaan Komoditas</div>
                     </div>
                     <div class="p-3 bg-emerald-50/60 rounded-xl border border-emerald-100">
                         <div class="text-lg font-bold text-emerald-800">{{ $user->buyerPriceOffers()->count() }}</div>

@@ -15,7 +15,7 @@
                 Selamat Datang, {{ $user->name }}!
             </h2>
             <p class="text-emerald-100 text-sm leading-relaxed">
-                Kelola hasil panen, pantau ketersediaan stok riil, serta pasang produk siap jual ke jaringan pembeli dan pengepul di SINTESA.
+                Catat hasil panen, pantau ketersediaan stok, dan pasarkan produk pertanian Anda langsung ke pembeli maupun pengepul.
             </p>
         </div>
         <div class="absolute right-6 -bottom-6 opacity-10 hidden sm:block">
@@ -48,7 +48,7 @@
         </div>
 
         <div class="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-sm flex items-center gap-4">
-            <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center flex-shrink-0">
+            <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center flex-shrink-0">
                 <i data-lucide="wheat" class="w-6 h-6"></i>
             </div>
             <div>
@@ -91,14 +91,14 @@
             <div>
                 <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pesanan Masuk</p>
                 <div class="flex items-baseline gap-2 mt-1">
-                    <p class="text-2xl font-black text-amber-600">{{ $pendingOrdersCount }}</p>
+                    <p class="text-2xl font-black text-emerald-600">{{ $pendingOrdersCount }}</p>
                     <span class="text-xs font-semibold text-slate-400">/ {{ $totalOrdersCount }} Total</span>
                 </div>
-                <a href="{{ route('farmer.orders.index') }}" class="text-[11px] font-bold text-amber-600 hover:underline inline-block mt-1">
+                <a href="{{ route('farmer.orders.index') }}" class="text-[11px] font-bold text-emerald-600 hover:underline inline-block mt-1">
                     Kelola Pesanan &rarr;
                 </a>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+            <div class="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                 <i data-lucide="inbox" class="w-5 h-5"></i>
             </div>
         </div>
@@ -111,7 +111,7 @@
                     Riwayat Transaksi &rarr;
                 </a>
             </div>
-            <div class="w-11 h-11 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <div class="w-11 h-11 rounded-xl bg-teal-50 text-teal-600 flex items-center justify-center">
                 <i data-lucide="badge-check" class="w-5 h-5"></i>
             </div>
         </div>
@@ -121,7 +121,7 @@
     <div class="p-6 rounded-3xl bg-white border border-slate-200/80 shadow-sm">
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
                     <i data-lucide="receipt" class="w-5 h-5"></i>
                 </div>
                 <div>

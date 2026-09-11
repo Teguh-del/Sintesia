@@ -10,12 +10,12 @@
         <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-4 relative z-10">
             <div class="max-w-3xl space-y-3">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-300 text-xs font-bold">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-400"></i>
-                    <span>Fitur Utama — Inovasi Algoritma Weighted Scoring</span>
+                    <i data-lucide="sparkles" class="w-3.5 h-3.5 text-emerald-300"></i>
+                    <span>Pencocokan Kebutuhan Pertanian</span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-black tracking-tight text-white">SINTESA Match</h1>
                 <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                    Algoritma pencocokan cerdas yang mengevaluasi basis data petani, stok riil, daya saing harga, dan jarak geolokasi untuk menemukan produsen pertanian yang paling optimal untuk kebutuhan bisnis Anda.
+                    Temukan mitra petani dan pasokan komoditas yang paling sesuai dengan kebutuhan Anda berdasarkan jenis komoditas, ketersediaan stok, harga terbaik, dan jarak terdekat.
                 </p>
             </div>
             <a href="{{ route('dashboard') }}" class="self-start inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-bold transition backdrop-blur-md shrink-0">
@@ -29,15 +29,15 @@
     <div class="bg-white rounded-3xl border border-slate-200/90 p-5 sm:p-6 shadow-sm">
         <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-2.5">
-                <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center">
                     <i data-lucide="sliders" class="w-4 h-4"></i>
                 </div>
                 <div>
-                    <h3 class="text-sm font-bold text-slate-900">Formulasi Pembobotan Multi-Kriteria (PRD Standar)</h3>
-                    <p class="text-[11px] text-slate-500">Kalkulasi matematis transparan dari data MySQL nyata</p>
+                    <h3 class="text-sm font-bold text-slate-900">Dasar Penilaian Rekomendasi</h3>
+                    <p class="text-[11px] text-slate-500">Dihitung secara adil berdasarkan empat kriteria utama</p>
                 </div>
             </div>
-            <span class="text-xs font-bold text-slate-400 bg-slate-100 px-2.5 py-1 rounded-lg">Total Bobot: 100%</span>
+            <span class="text-xs font-bold text-slate-500 bg-slate-100 px-2.5 py-1 rounded-lg">Total Bobot: 100%</span>
         </div>
 
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
@@ -46,28 +46,28 @@
                     <span class="font-bold text-emerald-900">Kesesuaian Komoditas</span>
                     <span class="font-black text-emerald-700 text-sm">35%</span>
                 </div>
-                <p class="text-[11px] text-emerald-800/80">Evaluasi jenis & varietas komoditas terhadap permintaan</p>
+                <p class="text-[11px] text-emerald-800/80">Kecocokan jenis komoditas hasil panen yang Anda cari</p>
             </div>
             <div class="p-3.5 bg-teal-50/60 rounded-2xl border border-teal-100/80">
                 <div class="flex items-center justify-between mb-1">
                     <span class="font-bold text-teal-900">Ketersediaan Stok</span>
                     <span class="font-black text-teal-700 text-sm">25%</span>
                 </div>
-                <p class="text-[11px] text-teal-800/80">Rasio stok fisik riil di kebun terhadap kuantitas yang dicari</p>
+                <p class="text-[11px] text-teal-800/80">Kecukupan stok riil petani untuk memenuhi jumlah pesanan</p>
             </div>
-            <div class="p-3.5 bg-blue-50/60 rounded-2xl border border-blue-100/80">
+            <div class="p-3.5 bg-emerald-50/60 rounded-2xl border border-emerald-100/80">
                 <div class="flex items-center justify-between mb-1">
-                    <span class="font-bold text-blue-900">Kesesuaian Harga</span>
-                    <span class="font-black text-blue-700 text-sm">20%</span>
+                    <span class="font-bold text-emerald-900">Kesesuaian Harga</span>
+                    <span class="font-black text-emerald-700 text-sm">20%</span>
                 </div>
-                <p class="text-[11px] text-blue-800/80">Tingkat efisiensi harga jual petani terhadap batas anggaran</p>
+                <p class="text-[11px] text-emerald-800/80">Kesesuaian harga produk dengan batas anggaran belanja Anda</p>
             </div>
-            <div class="p-3.5 bg-indigo-50/60 rounded-2xl border border-indigo-100/80">
+            <div class="p-3.5 bg-teal-50/60 rounded-2xl border border-teal-100/80">
                 <div class="flex items-center justify-between mb-1">
-                    <span class="font-bold text-indigo-900">Kedekatan Lokasi</span>
-                    <span class="font-black text-indigo-700 text-sm">20%</span>
+                    <span class="font-bold text-teal-900">Kedekatan Lokasi</span>
+                    <span class="font-black text-teal-700 text-sm">20%</span>
                 </div>
-                <p class="text-[11px] text-indigo-800/80">Jarak tempuh Haversine radius km kebun petani ke pembeli</p>
+                <p class="text-[11px] text-teal-800/80">Perkiraan jarak dari kebun petani ke lokasi pengiriman Anda</p>
             </div>
         </div>
     </div>

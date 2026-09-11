@@ -2,6 +2,28 @@
 
 @section('title', 'Detail Batch Stok - ' . $stock->batch_code)
 
+@push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<style>
+    .custom-farm-pin-mini {
+        background-color: #059669;
+        width: 30px;
+        height: 30px;
+        border-radius: 50% 50% 50% 0;
+        transform: rotate(-45deg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #ffffff;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2);
+    }
+    .custom-farm-pin-mini span {
+        transform: rotate(45deg);
+        font-size: 13px;
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="max-w-4xl mx-auto space-y-6">
     <!-- Breadcrumbs -->
@@ -75,6 +97,27 @@
                         <strong class="text-slate-900">{{ $stock->harvest->quality }}</strong>
                     </div>
                 </div>
+
+                @php
+                    $hLat = $stock->harvest->latitude ?? $stock->user->farmerProfile?->latitude;
+                    $hLng = $stock->harvest->longitude ?? $stock->user->farmerProfile?->longitude;
+                @endphp
+
+                @if($hLat && $hLng)
+                    <div class="mt-3 space-y-2">
+                        <div class="flex items-center justify-between text-xs text-emerald-800">
+                            <span class="font-bold flex items-center gap-1.5">
+                                <i data-lucide="map" class="w-3.5 h-3.5 text-emerald-600"></i>
+                                <span>Peta Titik Lahan Kebun Sumber Panen</span>
+                            </span>
+                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-md">
+                                Lokasi Tersimpan ✓
+                            </span>
+                        </div>
+                        <div id="stock-harvest-map" class="w-full h-48 rounded-xl border border-slate-200 overflow-hidden relative z-10"></div>
+                    </div>
+                @endif
+
                 @if($stock->harvest->notes)
                     <p class="text-xs text-slate-500 italic mt-2 bg-white p-3 rounded-xl border border-slate-200">
                         Catatan panen: "{{ $stock->harvest->notes }}"
@@ -135,6 +178,47 @@
                 </div>
             @endif
         </div>
-    </div>
 </div>
 @endsection
+
+@if(isset($hLat) && isset($hLng) && $hLat && $hLng)
+@push('scripts')
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const lat = {{ (float) $hLat }};
+        const lng = {{ (float) $hLng }};
+
+        const map = L.map('stock-harvest-map', {
+            center: [lat, lng],
+            zoom: 14,
+            zoomControl: false,
+            scrollWheelZoom: false,
+            dragging: false
+        });
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+
+        const farmIcon = L.divIcon({
+            className: 'custom-farm-marker',
+            html: `
+                <div class="custom-farm-pin-mini">
+                    <span>🌱</span>
+                </div>
+            `,
+            iconSize: [30, 30],
+            iconAnchor: [15, 30],
+            popupAnchor: [0, -30]
+        });
+
+        const marker = L.marker([lat, lng], { icon: farmIcon }).addTo(map);
+        marker.bindPopup('<b>Lokasi Kebun Sumber</b><br><span style="font-size:11px;">{{ addslashes($stock->harvest->location) }}</span>').openPopup();
+
+        setTimeout(() => map.invalidateSize(), 300);
+    });
+</script>
+@endpush
+@endif

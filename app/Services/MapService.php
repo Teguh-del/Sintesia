@@ -61,10 +61,15 @@ class MapService
                 continue;
             }
 
-            // If filtering by location, match in address or farm name
+            // If filtering by location (provinsi), match in address or farm name
             if ($location && $location !== 'all') {
-                $searchHaystack = strtolower(($profile->address ?? '') . ' ' . ($profile->farm_name ?? ''));
-                if (!str_contains($searchHaystack, strtolower($location))) {
+                $locLower = strtolower($location);
+                $searchHaystack = strtolower(($profile->province ?? '') . ' ' . ($profile->city ?? '') . ' ' . ($profile->address ?? '') . ' ' . ($profile->farm_name ?? ''));
+                $matched = str_contains($searchHaystack, $locLower);
+                if (!$matched && str_contains($locLower, 'yogyakarta')) {
+                    $matched = str_contains($searchHaystack, 'yogyakarta');
+                }
+                if (!$matched) {
                     continue;
                 }
             }

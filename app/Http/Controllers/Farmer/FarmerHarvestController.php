@@ -105,8 +105,9 @@ class FarmerHarvestController extends Controller
         }
 
         $commodities = Commodity::where('is_active', true)->orderBy('name')->get();
+        $farmerProfile = Auth::user()->farmerProfile;
 
-        return view('farmer.harvests.edit', compact('harvest', 'commodities'));
+        return view('farmer.harvests.edit', compact('harvest', 'commodities', 'farmerProfile'));
     }
 
     /**

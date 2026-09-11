@@ -62,6 +62,7 @@ Route::middleware(['auth', 'role:petani'])->prefix('farmer')->name('farmer.')->g
 
     // Farmer Stock Management (Phase 3)
     Route::get('stocks', [FarmerStockController::class, 'index'])->name('stocks.index');
+    Route::get('stocks/create', fn() => redirect()->route('farmer.harvests.create'))->name('stocks.create');
     Route::get('stocks/{stock}', [FarmerStockController::class, 'show'])->name('stocks.show');
     Route::patch('stocks/{stock}/adjust', [FarmerStockController::class, 'adjust'])->name('stocks.adjust');
 
@@ -203,3 +204,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/prices', [\App\Http\Controllers\PriceAnalyticsController::class, 'index'])->name('prices.index');
     Route::get('/api/prices/chart-data', [\App\Http\Controllers\PriceAnalyticsController::class, 'chartData'])->name('prices.chart');
 });
+
+// Indonesian Administrative Region API Endpoints (38 Provinces, Regencies, Districts, Villages)
+Route::get('/provinces', [\App\Http\Controllers\RegionController::class, 'getProvinces'])->name('regions.provinces');
+Route::get('/provinces/{province}/regencies', [\App\Http\Controllers\RegionController::class, 'getRegencies'])->name('regions.regencies');
+Route::get('/regencies/{regency}/districts', [\App\Http\Controllers\RegionController::class, 'getDistricts'])->name('regions.districts');
+Route::get('/districts/{district}/villages', [\App\Http\Controllers\RegionController::class, 'getVillages'])->name('regions.villages');
+
