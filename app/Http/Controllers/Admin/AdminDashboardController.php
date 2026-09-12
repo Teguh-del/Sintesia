@@ -7,7 +7,6 @@ use App\Models\Commodity;
 use App\Models\CommodityPrice;
 use App\Models\CommodityRequest;
 use App\Models\Order;
-use App\Models\Preorder;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +37,6 @@ class AdminDashboardController extends Controller
         $totalProducts = Product::count();
         $activeProducts = Product::where('status', 'active')->count();
         $activeRequests = CommodityRequest::where('status', 'Aktif')->count();
-        $activePreorders = Preorder::where('status', 'Dibuka')->count();
         $totalPriceRecords = CommodityPrice::count();
 
         // 4. Commodities & Recent Platform Activity
@@ -61,7 +59,6 @@ class AdminDashboardController extends Controller
             'totalProducts',
             'activeProducts',
             'activeRequests',
-            'activePreorders',
             'totalPriceRecords',
             'commodities',
             'recentOrders'

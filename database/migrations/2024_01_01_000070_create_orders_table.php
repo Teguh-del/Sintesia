@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('order_number')->unique();
             $table->foreignId('buyer_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
-            $table->enum('source_type', ['direct_purchase', 'negotiation', 'commodity_request', 'preorder'])->default('direct_purchase');
+            $table->enum('source_type', ['direct_purchase', 'negotiation', 'commodity_request'])->default('direct_purchase');
             $table->enum('status', [
                 'Menunggu Konfirmasi',
                 'Dikonfirmasi',

@@ -94,21 +94,6 @@ Route::middleware(['auth', 'role:petani'])->prefix('farmer')->name('farmer.')->g
         Route::get('/{commodityRequest}', [\App\Http\Controllers\Farmer\FarmerRequestController::class, 'show'])->name('show');
         Route::post('/{commodityRequest}/offer', [\App\Http\Controllers\Farmer\FarmerRequestController::class, 'submitOffer'])->name('offer');
     });
-
-    // Farmer Pre-Order Campaigns (Phase 5)
-    Route::prefix('preorders')->name('preorders.')->group(function () {
-        Route::get('/', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'index'])->name('index');
-        Route::get('/create', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'create'])->name('create');
-        Route::post('/', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'store'])->name('store');
-        Route::get('/{preorder}', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'show'])->name('show');
-        Route::post('/{preorder}/status', [\App\Http\Controllers\Farmer\FarmerPreorderController::class, 'updateStatus'])->name('status');
-    });
-});
-
-// Public Pre-Orders Catalog (Phase 5)
-Route::prefix('preorders')->name('preorders.')->group(function () {
-    Route::get('/', [\App\Http\Controllers\PreorderController::class, 'index'])->name('index');
-    Route::get('/{preorder:slug}', [\App\Http\Controllers\PreorderController::class, 'show'])->name('show');
 });
 
 // Authenticated User Routes (Phase 4 & Phase 5 - Buyers & General)
@@ -149,11 +134,6 @@ Route::middleware('auth')->group(function () {
         Route::post('/offers/{offer}/reject', [\App\Http\Controllers\CommodityRequestController::class, 'rejectOffer'])->name('rejectOffer');
         Route::post('/{commodityRequest}/close', [\App\Http\Controllers\CommodityRequestController::class, 'close'])->name('close');
     });
-
-    // Pre-Order Bookings for Buyers (Phase 5)
-    Route::post('/preorders/{preorder:slug}/book', [\App\Http\Controllers\PreorderController::class, 'book'])->name('preorders.book');
-    Route::get('/my-preorders', [\App\Http\Controllers\PreorderController::class, 'myBookings'])->name('preorders.my');
-    Route::post('/my-preorders/{item}/cancel', [\App\Http\Controllers\PreorderController::class, 'cancelBooking'])->name('preorders.cancelBooking');
 
     // SINTESA Match (Phase 6)
     Route::get('/matching', [\App\Http\Controllers\MatchingController::class, 'index'])->name('matching.index');

@@ -136,16 +136,6 @@ class User extends Authenticatable
         return $this->hasMany(PriceOffer::class, 'seller_id');
     }
 
-    public function preorders(): HasMany
-    {
-        return $this->hasMany(Preorder::class);
-    }
-
-    public function preorderItems(): HasMany
-    {
-        return $this->hasMany(PreorderItem::class, 'buyer_id');
-    }
-
     public function getAddressAttribute(): ?string
     {
         return $this->farmerProfile?->address

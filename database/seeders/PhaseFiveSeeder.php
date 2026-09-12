@@ -5,14 +5,11 @@ namespace Database\Seeders;
 use App\Models\Commodity;
 use App\Models\CommodityRequest;
 use App\Models\Notification;
-use App\Models\Preorder;
-use App\Models\PreorderItem;
 use App\Models\PriceOffer;
 use App\Models\Product;
 use App\Models\RequestOffer;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Str;
 
 class PhaseFiveSeeder extends Seeder
 {
@@ -120,64 +117,5 @@ class PhaseFiveSeeder extends Seeder
                 'status' => 'Counter Offer',
             ]);
         }
-
-        // 3. Seed Pre-Orders
-        $po1 = Preorder::create([
-            'user_id' => $farmer->id,
-            'commodity_id' => $jagung->id,
-            'title' => 'Pre-Order Jagung Manis Hibrida Masa Panen Raya Oktober',
-            'slug' => 'pre-order-jagung-manis-hibrida-' . Str::random(5),
-            'description' => 'Varietas jagung manis hibrida unggul dengan rasa manis alami brix tinggi. Cocok untuk industri kuliner, rebusan, dan pasar swalayan. Panen serentak diproyeksikan akhir bulan.',
-            'price' => 8500,
-            'estimated_production' => 3000,
-            'preorder_available_quantity' => 2500,
-            'min_order' => 50,
-            'unit' => 'kg',
-            'estimated_harvest_date' => now()->addDays(28)->toDateString(),
-            'location' => 'Lahan Blok C, Desa Margodadi, Seyegan, Sleman',
-            'image' => '/assets/images/commodities/jagung.jpg',
-            'status' => 'Dibuka',
-        ]);
-
-        PreorderItem::create([
-            'preorder_id' => $po1->id,
-            'buyer_id' => $collector->id,
-            'quantity' => 500,
-            'price_per_unit' => 8500,
-            'total_amount' => 500 * 8500,
-            'shipping_address' => 'Gudang Sentral Pengepul Sleman',
-            'shipping_method' => 'Ambil di Lokasi Petani',
-            'notes' => 'Alokasi awal kuota pengiriman minggu pertama panen.',
-            'status' => 'Menunggu Panen',
-        ]);
-
-        $po2 = Preorder::create([
-            'user_id' => $farmer->id,
-            'commodity_id' => $cabai->id,
-            'title' => 'Pre-Order Cabai Rawit Merah Dataran Tinggi Musim Panen Depan',
-            'slug' => 'pre-order-cabai-rawit-merah-dataran-tinggi-' . Str::random(5),
-            'description' => 'Budidaya cabai rawit merah semi-organik di dataran tinggi. Tingkat kepedasan maksimal, daya tahan simpan hingga 8 hari pasca panen.',
-            'price' => 38000,
-            'estimated_production' => 1200,
-            'preorder_available_quantity' => 1050,
-            'min_order' => 15,
-            'unit' => 'kg',
-            'estimated_harvest_date' => now()->addDays(35)->toDateString(),
-            'location' => 'Kebun Agro Merapi, Cangkringan, Sleman',
-            'image' => '/assets/images/commodities/cabai.jpg',
-            'status' => 'Dibuka',
-        ]);
-
-        PreorderItem::create([
-            'preorder_id' => $po2->id,
-            'buyer_id' => $consumer->id,
-            'quantity' => 150,
-            'price_per_unit' => 38000,
-            'total_amount' => 150 * 38000,
-            'shipping_address' => 'Resto & Katering Berkah Yogyakarta',
-            'shipping_method' => 'Pengiriman / Kurir',
-            'notes' => 'Mohon dipacking per 10kg karung plastik jaring.',
-            'status' => 'Menunggu Panen',
-        ]);
     }
 }

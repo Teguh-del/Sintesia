@@ -76,7 +76,7 @@
                     </li>
                     <li class="flex items-start gap-3">
                         <i data-lucide="x-circle" class="w-5 h-5 text-rose-500 flex-shrink-0 mt-0.5"></i>
-                        <span>Risiko gagal jual saat panen raya karena ketiadaan kontrak pre-order yang mengikat.</span>
+                        <span>Risiko gagal jual saat panen raya karena ketiadaan kepastian penyerapan pasar yang adil.</span>
                     </li>
                 </ul>
             </div>
