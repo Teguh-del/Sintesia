@@ -12,34 +12,12 @@
             </div>
             <h2 class="text-3xl font-black text-slate-900 tracking-tight">Masuk ke SINTESA</h2>
             <p class="mt-2 text-sm text-slate-500">
-                Pilih akses peran Anda atau masukkan email & kata sandi terdaftar.
+                Masukkan email & kata sandi terdaftar.
             </p>
         </div>
 
         <!-- Login Card -->
         <div class="bg-white p-8 rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-200/80">
-            <!-- Quick Fill Demo Accounts -->
-            <div class="mb-6 p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
-                <div class="flex items-center gap-2 mb-2.5">
-                    <i data-lucide="zap" class="w-4 h-4 text-amber-500"></i>
-                    <span class="text-xs font-bold text-slate-700 uppercase tracking-wider">Akses Cepat Akun Demo (Phase 1):</span>
-                </div>
-                <div class="grid grid-cols-2 gap-2">
-                    <button type="button" onclick="fillDemo('petani@sintesa.id', 'password')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-emerald-50 text-emerald-800 border border-slate-200 hover:border-emerald-300 transition text-left">
-                        🌱 Petani (Supardi)
-                    </button>
-                    <button type="button" onclick="fillDemo('pengepul@sintesa.id', 'password')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-amber-50 text-amber-800 border border-slate-200 hover:border-amber-300 transition text-left">
-                        🚛 Pengepul (H. Slamet)
-                    </button>
-                    <button type="button" onclick="fillDemo('konsumen@sintesa.id', 'password')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-blue-50 text-blue-800 border border-slate-200 hover:border-blue-300 transition text-left">
-                        🛒 Konsumen (Ibu Sari)
-                    </button>
-                    <button type="button" onclick="fillDemo('admin@sintesa.id', 'password')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white hover:bg-purple-50 text-purple-800 border border-slate-200 hover:border-purple-300 transition text-left">
-                        👑 Admin Sistem
-                    </button>
-                </div>
-            </div>
-
             <!-- Login Form -->
             <form action="{{ route('login') }}" method="POST" class="space-y-5">
                 @csrf
