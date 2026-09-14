@@ -21,6 +21,18 @@ class PhaseOneAuthTest extends TestCase
     }
 
     /**
+     * Test authenticated user visiting landing page redirects to their role dashboard.
+     */
+    public function test_authenticated_user_cannot_access_landing_page(): void
+    {
+        $farmer = User::where('role', 'petani')->first();
+        $this->actingAs($farmer)->get('/')->assertRedirect('/farmer/dashboard');
+
+        $collector = User::where('role', 'pengepul')->first();
+        $this->actingAs($collector)->get('/')->assertRedirect('/collector/dashboard');
+    }
+
+    /**
      * Test login page renders successfully.
      */
     public function test_login_page_renders(): void

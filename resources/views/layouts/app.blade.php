@@ -47,7 +47,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <!-- Logo -->
-                <a href="{{ route('home') }}" class="flex items-center gap-3 group">
+                <a href="{{ Auth::check() ? Auth::user()->getDashboardRoute() : route('home') }}" class="flex items-center gap-3 group">
                     <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-emerald-600 to-teal-500 flex items-center justify-center text-white shadow-md shadow-emerald-500/20 group-hover:scale-105 transition duration-200">
                         <i data-lucide="sprout" class="w-6 h-6"></i>
                     </div>
@@ -87,7 +87,7 @@
                             Masuk
                         </a>
                         <a href="{{ route('register') }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm shadow-sm hover:shadow transition">
-                            <span>Daftar Akun</span>
+                            <span>Daftar</span>
                             <i data-lucide="arrow-right" class="w-4 h-4"></i>
                         </a>
                     @endauth
@@ -153,9 +153,8 @@
                     </ul>
                 </div>
             </div>
-            <div class="pt-8 border-t border-slate-800 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+            <div class="pt-8 border-t border-slate-800 text-center text-xs text-slate-500">
                 <p>&copy; {{ date('Y') }} SINTESA — Sistem Integrasi Niaga Pertanian Cerdas. All rights reserved.</p>
-                <p>Arsitektur Laravel Monolith & Tailwind CSS</p>
             </div>
         </div>
     </footer>

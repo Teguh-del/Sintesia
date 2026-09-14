@@ -66,7 +66,7 @@
             
             <!-- Left Sidebar Filter -->
             <div class="lg:col-span-1">
-                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 sticky top-24">
+                <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-6 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto filter-scrollbar">
                     <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
                         <div class="flex items-center gap-2 text-slate-900 font-bold">
                             <i data-lucide="sliders-horizontal" class="w-5 h-5 text-emerald-600"></i>
@@ -316,3 +316,26 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<style>
+    .filter-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #94a3b8 #f1f5f9;
+    }
+    .filter-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .filter-scrollbar::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 9999px;
+    }
+    .filter-scrollbar::-webkit-scrollbar-thumb {
+        background-color: #94a3b8;
+        border-radius: 9999px;
+    }
+    .filter-scrollbar::-webkit-scrollbar-thumb:hover {
+        background-color: #059669;
+    }
+</style>
+@endpush

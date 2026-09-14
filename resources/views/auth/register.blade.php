@@ -156,7 +156,7 @@
                     <div class="flex items-center justify-between border-b border-slate-200 pb-2.5">
                         <div class="flex items-center gap-2">
                             <i data-lucide="map-pin" class="w-4 h-4 text-emerald-600"></i>
-                            <label class="text-xs font-bold uppercase tracking-wider text-slate-800">Alamat Domisili / Lokasi Lahan</label>
+                            <label id="location-section-title" class="text-xs font-bold uppercase tracking-wider text-slate-800">{{ in_array(old('role'), ['pengepul', 'konsumen']) ? 'Alamat Domisili' : 'Lokasi Lahan' }}</label>
                         </div>
                         <span class="text-[11px] text-emerald-700 font-medium bg-emerald-100/60 px-2 py-0.5 rounded-md">Isi Terpisah Manual</span>
                     </div>
@@ -241,6 +241,7 @@
 function updateRoleFields(role) {
     const farmerFields = document.getElementById('farmer-fields');
     const collectorFields = document.getElementById('collector-fields');
+    const locationTitle = document.getElementById('location-section-title');
 
     const labels = {
         petani: document.getElementById('role-label-petani'),
@@ -257,14 +258,17 @@ function updateRoleFields(role) {
         labels.petani.className = "relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition text-center shadow-sm";
         farmerFields.classList.remove('hidden');
         collectorFields.classList.add('hidden');
+        if (locationTitle) locationTitle.textContent = 'Lokasi Lahan';
     } else if (role === 'pengepul') {
         labels.pengepul.className = "relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition text-center shadow-sm";
         farmerFields.classList.add('hidden');
         collectorFields.classList.remove('hidden');
+        if (locationTitle) locationTitle.textContent = 'Alamat Domisili';
     } else {
         labels.konsumen.className = "relative flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-emerald-600 bg-emerald-50/50 cursor-pointer transition text-center shadow-sm";
         farmerFields.classList.add('hidden');
         collectorFields.classList.add('hidden');
+        if (locationTitle) locationTitle.textContent = 'Alamat Domisili';
     }
 }
 

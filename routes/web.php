@@ -20,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 
 // Landing Page
 Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect(auth()->user()->getDashboardRoute());
+    }
     $commodities = Commodity::where('is_active', true)->get();
     return view('welcome', compact('commodities'));
 })->name('home');

@@ -101,7 +101,7 @@
     <aside id="sidebar" class="fixed inset-y-0 left-0 z-50 w-72 h-full bg-slate-900 text-slate-300 flex flex-col transition-transform duration-300 -translate-x-full md:translate-x-0 md:static md:h-screen md:shrink-0">
         <!-- Logo Area -->
         <div class="h-20 shrink-0 flex items-center justify-between px-6 border-b border-slate-800">
-            <a href="{{ route('home') }}" class="flex items-center gap-3">
+            <a href="{{ Auth::user()->getDashboardRoute() }}" class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-400 flex items-center justify-center text-white shadow-md">
                     <i data-lucide="sprout" class="w-5 h-5"></i>
                 </div>
@@ -122,7 +122,7 @@
             @if(Auth::user()->role === 'petani')
                 <a href="{{ route('farmer.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                    <span>Dashboard Petani</span>
+                    <span>Dashboard</span>
                 </a>
                 <a href="{{ route('farmer.harvests.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('farmer.harvests.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <div class="flex items-center gap-3">
@@ -180,7 +180,7 @@
             @elseif(Auth::user()->role === 'pengepul')
                 <a href="{{ route('collector.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('collector.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                    <span>Dashboard Pengepul</span>
+                    <span>Dashboard</span>
                 </a>
                 <!-- Pengepul Orders (Phase 4) -->
                 <a href="{{ route('orders.index') }}" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('orders.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
@@ -216,7 +216,7 @@
             @elseif(Auth::user()->role === 'konsumen')
                 <a href="{{ route('consumer.dashboard') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('consumer.dashboard') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                    <span>Dashboard Konsumen</span>
+                    <span>Dashboard</span>
                 </a>
                 <a href="{{ route('marketplace.index') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition {{ request()->routeIs('marketplace.*') ? 'bg-emerald-600 text-white shadow-md shadow-emerald-900/20' : 'text-slate-300 hover:bg-slate-800 hover:text-white' }}">
                     <i data-lucide="shopping-cart" class="w-5 h-5"></i>
@@ -304,12 +304,6 @@
                     <i data-lucide="line-chart" class="w-5 h-5 text-teal-400"></i>
                     <span>Tren Harga Pasar</span>
                 </div>
-            </a>
-
-            <div class="pt-4 px-3 pb-2 text-[11px] font-bold tracking-wider text-slate-500 uppercase">Ekosistem SINTESA</div>
-            <a href="{{ route('home') }}" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-400 hover:bg-slate-800 hover:text-white transition">
-                <i data-lucide="globe" class="w-5 h-5"></i>
-                <span>Lihat Landing Page</span>
             </a>
         </nav>
 
