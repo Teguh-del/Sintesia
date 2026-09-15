@@ -360,9 +360,12 @@
 
     // Leaflet Interactive Map Picker for Farmer
     let map, marker;
+    let geocodeTimeout = null;
+
     document.addEventListener('DOMContentLoaded', function() {
         const latInput = document.getElementById('latitude');
         const lngInput = document.getElementById('longitude');
+        const locationInput = document.getElementById('location');
         const coordDisplay = document.getElementById('coord-display');
 
         let initialLat = parseFloat(latInput.value) || -7.8712;
@@ -371,7 +374,7 @@
         // Initialize Map
         map = L.map('location-picker-map', {
             center: [initialLat, initialLng],
-            zoom: 13,
+            zoom: 14,
             scrollWheelZoom: false
         });
 
@@ -398,21 +401,32 @@
             icon: farmIcon
         }).addTo(map);
 
-        marker.bindPopup('<b>Lokasi Kebun Anda</b><br><span style="font-size:11px;color:#64748b;">Geser pin atau klik peta untuk ubah titik.</span>').openPopup();
+        const currentLocText = locationInput ? (locationInput.value.trim() || 'Lokasi Kebun Anda') : 'Lokasi Kebun Anda';
+        marker.bindPopup(`<b>Lokasi Kebun Produk</b><br><span style="font-size:11px;color:#334155;">${currentLocText}</span>`).openPopup();
 
-        function updatePosition(lat, lng) {
-            const fixedLat = parseFloat(lat).toFixed(6);
-            const fixedLng = parseFloat(lng).toFixed(6);
+        function updatePosition(lat, lng, autoUpdateInput = true) {
+            const fixedLat = parseFloat(lat).toFixed(7);
+            const fixedLng = parseFloat(lng).toFixed(7);
             latInput.value = fixedLat;
             lngInput.value = fixedLng;
+
             if (coordDisplay) {
-                coordDisplay.textContent = 'Memperbarui lokasi kebun...';
+                coordDisplay.innerHTML = '<span class="text-amber-700 animate-pulse font-semibold">📍 Mendeteksi alamat dari pin peta...</span>';
             }
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${fixedLat}&lon=${fixedLng}&zoom=16`)
+
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${fixedLat}&lon=${fixedLng}&zoom=18&addressdetails=1`)
                 .then(res => res.json())
                 .then(data => {
-                    if (coordDisplay) {
-                        coordDisplay.textContent = data && data.display_name ? 'Area: ' + data.display_name : 'Pin lokasi lahan terpasang di peta';
+                    if (data && data.display_name) {
+                        if (coordDisplay) {
+                            coordDisplay.innerHTML = '<strong>' + data.display_name + '</strong>';
+                        }
+                        if (autoUpdateInput && locationInput) {
+                            locationInput.value = data.display_name;
+                        }
+                        marker.bindPopup(`<b>Lokasi Kebun Produk</b><br><span style="font-size:11px;color:#334155;">${data.display_name}</span>`).openPopup();
+                    } else if (coordDisplay) {
+                        coordDisplay.textContent = 'Pin lokasi lahan terpasang di peta (' + fixedLat + ', ' + fixedLng + ')';
                     }
                 })
                 .catch(() => {
@@ -425,14 +439,51 @@
         // Marker drag handler
         marker.on('dragend', function(e) {
             const pos = e.target.getLatLng();
-            updatePosition(pos.lat, pos.lng);
+            updatePosition(pos.lat, pos.lng, true);
         });
 
         // Map click handler
         map.on('click', function(e) {
             marker.setLatLng(e.latlng);
-            updatePosition(e.latlng.lat, e.latlng.lng);
+            updatePosition(e.latlng.lat, e.latlng.lng, true);
         });
+
+        // Two-way sync: Forward Geocode when user types into location input
+        if (locationInput) {
+            locationInput.addEventListener('input', function() {
+                clearTimeout(geocodeTimeout);
+                const query = this.value.trim();
+                if (query.length < 4) return;
+
+                if (coordDisplay) {
+                    coordDisplay.innerHTML = '<span class="text-blue-700 animate-pulse font-semibold">🔍 Menyesuaikan titik pin dengan alamat...</span>';
+                }
+
+                geocodeTimeout = setTimeout(function() {
+                    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`)
+                        .then(res => res.json())
+                        .then(results => {
+                            if (results && results.length > 0) {
+                                const place = results[0];
+                                const lat = parseFloat(place.lat);
+                                const lon = parseFloat(place.lon);
+
+                                latInput.value = lat.toFixed(7);
+                                lngInput.value = lon.toFixed(7);
+
+                                map.flyTo([lat, lon], 15);
+                                marker.setLatLng([lat, lon]);
+                                marker.bindPopup(`<b>Lokasi Kebun Disesuaikan</b><br><span style="font-size:11px;color:#334155;">${place.display_name}</span>`).openPopup();
+
+                                if (coordDisplay) {
+                                    coordDisplay.innerHTML = '<strong>' + place.display_name + '</strong>';
+                                }
+                            }
+                        })
+                        .catch(() => {});
+                }, 800);
+            });
+        }
 
         // Ensure tiles load correctly on container render
         setTimeout(function() {
@@ -449,7 +500,7 @@
 
         const coordDisplay = document.getElementById('coord-display');
         if (coordDisplay) {
-            coordDisplay.textContent = 'Mencari sinyal GPS perangkat...';
+            coordDisplay.innerHTML = '<span class="text-amber-700 animate-pulse font-semibold">Mencari sinyal GPS perangkat...</span>';
         }
 
         navigator.geolocation.getCurrentPosition(
@@ -458,32 +509,35 @@
                 const lng = position.coords.longitude;
 
                 if (map && marker) {
-                    map.setView([lat, lng], 15);
+                    map.flyTo([lat, lng], 16);
                     marker.setLatLng([lat, lng]);
-                    marker.bindPopup('<b>Lokasi GPS Anda Ditemukan!</b>').openPopup();
                 }
 
-                document.getElementById('latitude').value = parseFloat(lat).toFixed(6);
-                document.getElementById('longitude').value = parseFloat(lng).toFixed(6);
-                if (coordDisplay) {
-                    coordDisplay.textContent = 'Lokasi GPS lahan berhasil ditemukan';
-                }
+                document.getElementById('latitude').value = parseFloat(lat).toFixed(7);
+                document.getElementById('longitude').value = parseFloat(lng).toFixed(7);
 
-                // Reverse geocode to fill location address if empty
+                // Reverse geocode to fill location address
                 const locationInput = document.getElementById('location');
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
                     .then(res => res.json())
                     .then(data => {
                         if (data && data.display_name) {
-                            if (locationInput && !locationInput.value.trim()) {
+                            if (locationInput) {
                                 locationInput.value = data.display_name;
                             }
                             if (coordDisplay) {
-                                coordDisplay.textContent = 'Area: ' + data.display_name;
+                                coordDisplay.innerHTML = '<strong>' + data.display_name + '</strong>';
+                            }
+                            if (marker) {
+                                marker.bindPopup(`<b>Lokasi Kebun (GPS)</b><br><span style="font-size:11px;color:#334155;">${data.display_name}</span>`).openPopup();
                             }
                         }
                     })
-                    .catch(() => {});
+                    .catch(() => {
+                        if (coordDisplay) {
+                            coordDisplay.textContent = 'Lokasi GPS lahan berhasil ditandai di peta';
+                        }
+                    });
             },
             function(error) {
                 alert('Gagal mendeteksi lokasi GPS: ' + error.message);

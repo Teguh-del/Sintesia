@@ -252,6 +252,7 @@
 <script>
     let editMap, editMarker;
     let latestAddressString = '';
+    let geocodeTimeout = null;
 
     document.addEventListener('DOMContentLoaded', function() {
         const commoditySelect = document.getElementById('commodity_id');
@@ -267,12 +268,15 @@
 
         const latInput = document.getElementById('latitude');
         const lngInput = document.getElementById('longitude');
+        const locationInput = document.getElementById('location');
+        const statusEl = document.getElementById('map-readable-status');
+
         let initialLat = parseFloat(latInput.value) || -7.8712;
         let initialLng = parseFloat(lngInput.value) || 112.5273;
 
         editMap = L.map('harvest-edit-map', {
             center: [initialLat, initialLng],
-            zoom: 13,
+            zoom: 14,
             scrollWheelZoom: false
         });
 
@@ -298,45 +302,100 @@
             icon: farmIcon
         }).addTo(editMap);
 
-        editMarker.bindPopup('<b>Lokasi Kebun Panen Anda</b><br><span style="font-size:11px;color:#64748b;">Geser pin atau klik peta untuk sesuaikan titik.</span>').openPopup();
+        const currentLoc = locationInput.value.trim() || 'Lokasi Kebun Panen';
+        editMarker.bindPopup(`<b>Lokasi Kebun Panen</b><br><span style="font-size:11px;color:#334155;">${currentLoc}</span>`).openPopup();
 
-        function onMarkerMoved(lat, lng) {
+        // Reverse Geocode: when marker moves, update lat/lng and sync address text
+        function onMarkerMoved(lat, lng, autoUpdateInput = true) {
             latInput.value = parseFloat(lat).toFixed(7);
             lngInput.value = parseFloat(lng).toFixed(7);
 
-            const statusEl = document.getElementById('map-readable-status');
             if (statusEl) {
-                statusEl.textContent = 'Mendeteksi wilayah kebun...';
+                statusEl.innerHTML = '<span class="text-amber-700 animate-pulse font-semibold">📍 Mengambil alamat dari titik pin peta...</span>';
             }
 
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1`)
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
                 .then(res => res.json())
                 .then(data => {
                     if (data && data.display_name) {
                         latestAddressString = data.display_name;
                         if (statusEl) {
-                            statusEl.textContent = 'Area kebun: ' + data.display_name;
+                            statusEl.innerHTML = '<span class="text-emerald-900 font-medium">Area terdeteksi: <strong>' + data.display_name + '</strong></span>';
                         }
+                        if (autoUpdateInput && locationInput) {
+                            locationInput.value = data.display_name;
+                        }
+                        editMarker.bindPopup(`<b>Lokasi Kebun Panen</b><br><span style="font-size:11px;color:#334155;">${data.display_name}</span>`).openPopup();
                     } else if (statusEl) {
-                        statusEl.textContent = 'Pin lokasi lahan terpasang di peta.';
+                        statusEl.textContent = 'Pin lokasi lahan terpasang di koordinat: ' + parseFloat(lat).toFixed(5) + ', ' + parseFloat(lng).toFixed(5);
                     }
                 })
                 .catch(() => {
                     if (statusEl) {
-                        statusEl.textContent = 'Pin lokasi lahan terpasang di peta.';
+                        statusEl.textContent = 'Pin lokasi lahan terpasang di koordinat: ' + parseFloat(lat).toFixed(5) + ', ' + parseFloat(lng).toFixed(5);
                     }
                 });
         }
 
+        // Marker dragend event (auto updates address text)
         editMarker.on('dragend', function(e) {
             const pos = e.target.getLatLng();
-            onMarkerMoved(pos.lat, pos.lng);
+            onMarkerMoved(pos.lat, pos.lng, true);
         });
 
+        // Map click event (moves pin and auto updates address text)
         editMap.on('click', function(e) {
             editMarker.setLatLng(e.latlng);
-            onMarkerMoved(e.latlng.lat, e.latlng.lng);
+            onMarkerMoved(e.latlng.lat, e.latlng.lng, true);
         });
+
+        // Forward Geocode: when user types/changes location input, move pin on map
+        if (locationInput) {
+            locationInput.addEventListener('input', function() {
+                clearTimeout(geocodeTimeout);
+                const query = this.value.trim();
+                if (query.length < 4) return;
+
+                if (statusEl) {
+                    statusEl.innerHTML = '<span class="text-blue-700 animate-pulse font-semibold">🔍 Menyesuaikan pin peta dengan alamat baru...</span>';
+                }
+
+                geocodeTimeout = setTimeout(function() {
+                    geocodeAddressToMap(query);
+                }, 800);
+            });
+
+            locationInput.addEventListener('change', function() {
+                const query = this.value.trim();
+                if (query.length >= 3) {
+                    geocodeAddressToMap(query);
+                }
+            });
+        }
+
+        function geocodeAddressToMap(query) {
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`)
+                .then(res => res.json())
+                .then(results => {
+                    if (results && results.length > 0) {
+                        const place = results[0];
+                        const lat = parseFloat(place.lat);
+                        const lon = parseFloat(place.lon);
+
+                        latInput.value = lat.toFixed(7);
+                        lngInput.value = lon.toFixed(7);
+
+                        editMap.flyTo([lat, lon], 15);
+                        editMarker.setLatLng([lat, lon]);
+                        editMarker.bindPopup(`<b>Lokasi Kebun Disesuaikan</b><br><span style="font-size:11px;color:#334155;">${place.display_name}</span>`).openPopup();
+
+                        if (statusEl) {
+                            statusEl.innerHTML = '<span class="text-emerald-900 font-medium">📍 Pin disinkronkan: <strong>' + place.display_name + '</strong></span>';
+                        }
+                    }
+                })
+                .catch(() => {});
+        }
 
         setTimeout(function() {
             editMap.invalidateSize();
@@ -351,7 +410,7 @@
 
         const statusEl = document.getElementById('map-readable-status');
         if (statusEl) {
-            statusEl.textContent = 'Mencari sinyal GPS perangkat...';
+            statusEl.innerHTML = '<span class="text-amber-700 animate-pulse font-semibold">Mencari sinyal GPS perangkat...</span>';
         }
 
         navigator.geolocation.getCurrentPosition(
@@ -360,25 +419,27 @@
                 const lng = position.coords.longitude;
 
                 if (editMap && editMarker) {
-                    editMap.setView([lat, lng], 15);
+                    editMap.flyTo([lat, lng], 16);
                     editMarker.setLatLng([lat, lng]);
-                    editMarker.bindPopup('<b>Lokasi Kebun Ditemukan (GPS)!</b>').openPopup();
                 }
 
                 document.getElementById('latitude').value = parseFloat(lat).toFixed(7);
                 document.getElementById('longitude').value = parseFloat(lng).toFixed(7);
 
-                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=16&addressdetails=1`)
+                fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
                     .then(res => res.json())
                     .then(data => {
                         if (data && data.display_name) {
                             latestAddressString = data.display_name;
                             if (statusEl) {
-                                statusEl.textContent = 'Area kebun (GPS): ' + data.display_name;
+                                statusEl.innerHTML = '<span class="text-emerald-900 font-medium">Area kebun (GPS): <strong>' + data.display_name + '</strong></span>';
                             }
                             const locationInput = document.getElementById('location');
                             if (locationInput) {
                                 locationInput.value = data.display_name;
+                            }
+                            if (editMarker) {
+                                editMarker.bindPopup(`<b>Lokasi Kebun (GPS)</b><br><span style="font-size:11px;color:#334155;">${data.display_name}</span>`).openPopup();
                             }
                         }
                     })
@@ -401,6 +462,9 @@
     window.searchLocationOnMap = function() {
         const query = document.getElementById('map-search-query').value.trim();
         const msgEl = document.getElementById('search-status-message');
+        const statusEl = document.getElementById('map-readable-status');
+        const locationInput = document.getElementById('location');
+
         if (!query) {
             alert('Silakan ketik nama desa, kecamatan, atau kota kebun Anda terlebih dahulu.');
             return;
@@ -420,7 +484,7 @@
                     const lon = parseFloat(place.lon);
 
                     if (editMap && editMarker) {
-                        editMap.setView([lat, lon], 14);
+                        editMap.flyTo([lat, lon], 15);
                         editMarker.setLatLng([lat, lon]);
                         editMarker.bindPopup(`<b>${place.display_name}</b>`).openPopup();
                     }
@@ -429,18 +493,15 @@
                     document.getElementById('longitude').value = lon.toFixed(7);
 
                     latestAddressString = place.display_name;
-                    const statusEl = document.getElementById('map-readable-status');
-                    if (statusEl) {
-                        statusEl.textContent = 'Area terpilih: ' + place.display_name;
-                    }
-
-                    const locationInput = document.getElementById('location');
-                    if (locationInput && confirm('Perbarui alamat kebun dengan hasil pencarian: "' + place.display_name + '"?')) {
+                    if (locationInput) {
                         locationInput.value = place.display_name;
+                    }
+                    if (statusEl) {
+                        statusEl.innerHTML = '<span class="text-emerald-900 font-medium">Area terpilih: <strong>' + place.display_name + '</strong></span>';
                     }
 
                     if (msgEl) {
-                        msgEl.textContent = 'Lokasi ditemukan: ' + place.display_name;
+                        msgEl.textContent = '✓ Lokasi ditemukan dan pin telah disinkronkan: ' + place.display_name;
                     }
                 } else {
                     if (msgEl) {

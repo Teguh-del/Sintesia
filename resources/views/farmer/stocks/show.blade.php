@@ -110,9 +110,19 @@
                                 <i data-lucide="map" class="w-3.5 h-3.5 text-emerald-600"></i>
                                 <span>Peta Titik Lahan Kebun Sumber Panen</span>
                             </span>
-                            <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-md">
-                                Lokasi Tersimpan ✓
-                            </span>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-md">
+                                    Lokasi Tersimpan ✓
+                                </span>
+                                @if($stock->user_id === Auth::id())
+                                    <a href="{{ route('farmer.harvests.edit', $stock->harvest->id) }}" 
+                                       class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 hover:text-emerald-800 bg-white hover:bg-emerald-50 px-2.5 py-0.5 rounded-md border border-emerald-300 shadow-2xs transition"
+                                       title="Sesuaikan titik lokasi atau alamat lahan di peta">
+                                        <i data-lucide="edit-3" class="w-3 h-3"></i>
+                                        <span>Ubah Titik Lahan</span>
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                         <div id="stock-harvest-map" class="w-full h-48 rounded-xl border border-slate-200 overflow-hidden relative z-10"></div>
                     </div>
